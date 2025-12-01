@@ -473,12 +473,13 @@
         
        const STUDENT_DATA = {
     	"119AU": "AURELIO",
-   	"195AN": "ANA CAROLINA",
+   	"195AC": "ANA CAROLINA",
 	"120BR": "BRUNA",
     	"901JR": "JÚNIOR" // Mantido como solicitado
 };
 
-        const GRAMMAR_QUESTIONS = [
+        // BLOCO UNIFICADO COM 30 QUESTÕES E SUMÁRIOS (SEM TAGS HTML)
+const GRAMMAR_QUESTIONS = [
     // --- SIMPLE TENSES (To Be) ---
     { type: 'mcq', question: "I ___ happy.", topic: "Verb To Be - Simple Present", hint: "DICA 1: Presente.", hint_2: "DICA 2: A...", options: [ { text: "Am", isCorrect: true, rationale: "Correto! I am happy." }, { text: "Is", isCorrect: false, rationale: "Incorreto." }, { text: "Are", isCorrect: false, rationale: "Incorreto." }, { text: "Be", isCorrect: false, rationale: "Incorreto." } ] },
     { type: 'fill-in', question: "I ______ (passado) happy.", topic: "Verb To Be - Simple Past", hint: "DICA 1: Passado de Am.", hint_2: "DICA 2: Wa...", answer: ["was"], rationale: "Correto. I was happy." },
@@ -524,32 +525,32 @@
 
 const TOPIC_SUMMARIES = {
     // --- TO BE (SIMPLES) ---
-    "Verb To Be - Simple Present": "Expressa estado atual ou características. Estrutura: Sujeito + <b>am/is/are</b>. Ex: 'I <b>am</b> happy'.",
-    "Verb To Be - Simple Past": "Expressa estado no passado. Estrutura: Sujeito + <b>was/were</b>. Ex: 'I <b>was</b> happy'.",
-    "Verb To Be - Simple Future": "Expressa estado futuro. Estrutura: Sujeito + <b>will be</b>. Ex: 'I <b>will be</b> happy'.",
-    "Verb To Be - Conditional": "Expressa uma possibilidade ou estado hipotético. Estrutura: Sujeito + <b>would be</b>. Ex: 'I <b>would be</b> happy'.",
+    "Verb To Be - Simple Present": "Expressa estado atual ou características. Estrutura: Sujeito + am/is/are. Ex: 'I am happy'.",
+    "Verb To Be - Simple Past": "Expressa estado no passado. Estrutura: Sujeito + was/were. Ex: 'I was happy'.",
+    "Verb To Be - Simple Future": "Expressa estado futuro. Estrutura: Sujeito + will be. Ex: 'I will be happy'.",
+    "Verb To Be - Conditional": "Expressa uma possibilidade ou estado hipotético. Estrutura: Sujeito + would be. Ex: 'I would be happy'.",
 
     // --- CONTINUOUS (PROGRESSIVO) ---
-    "Present Continuous": "Ação acontecendo agora. Estrutura: <b>am/is/are</b> + verbo-ING. Ex: 'I <b>am dancing</b>'.",
-    "Past Continuous": "Ação que estava acontecendo no passado. Estrutura: <b>was/were</b> + verbo-ING. Ex: 'She <b>was dancing</b>'.",
-    "Past Continuous (Plural)": "Ação em progresso no passado (plural). Estrutura: <b>were</b> + verbo-ING. Ex: 'They <b>were dancing</b>'.",
-    "Future Continuous": "Ação que estará acontecendo no futuro. Estrutura: <b>will be</b> + verbo-ING. Ex: 'He <b>will be dancing</b>'.",
-    "Conditional Continuous": "Ação que estaria acontecendo. Estrutura: <b>would be</b> + verbo-ING. Ex: 'They <b>would be dancing</b>'.",
+    "Present Continuous": "Ação acontecendo agora. Estrutura: am/is/are + verbo-ING. Ex: 'I am dancing'.",
+    "Past Continuous": "Ação que estava acontecendo no passado. Estrutura: was/were + verbo-ING. Ex: 'She was dancing'.",
+    "Past Continuous (Plural)": "Ação em progresso no passado (plural). Estrutura: were + verbo-ING. Ex: 'They were dancing'.",
+    "Future Continuous": "Ação que estará acontecendo no futuro. Estrutura: will be + verbo-ING. Ex: 'He will be dancing'.",
+    "Conditional Continuous": "Ação que estaria acontecendo. Estrutura: would be + verbo-ING. Ex: 'They would be dancing'.",
 
     // --- PERFECT (PERFEITO) ---
-    "Present Perfect": "Ação concluída ou relevante no presente. Estrutura: <b>have/has</b> + Particípio. Ex: 'I <b>have danced</b>'.",
-    "Past Perfect": "Ação anterior a outra no passado. Estrutura: <b>had</b> + Particípio. Ex: 'I <b>had danced</b>'.",
-    "Future Perfect": "Ação que estará terminada no futuro. Estrutura: <b>will have</b> + Particípio. Ex: 'I <b>will have danced</b>'.",
-    "Conditional Perfect": "Ação que teria acontecido. Estrutura: <b>would have</b> + Particípio. Ex: 'I <b>would have danced</b>'.",
+    "Present Perfect": "Ação concluída ou relevante no presente. Estrutura: have/has + Particípio. Ex: 'I have danced'.",
+    "Past Perfect": "Ação anterior a outra no passado. Estrutura: had + Particípio. Ex: 'I had danced'.",
+    "Future Perfect": "Ação que estará terminada no futuro. Estrutura: will have + Particípio. Ex: 'I will have danced'.",
+    "Conditional Perfect": "Ação que teria acontecido. Estrutura: would have + Particípio. Ex: 'I would have danced'.",
 
     // --- PERFECT CONTINUOUS & TIME CLAUSES ---
-    "Present Perfect Continuous": "Ação que começou no passado e continua (ou tem efeitos) agora. Foca na duração. Ex: 'I <b>have been dancing</b> since 7 AM'.",
-    "Past Continuous (Interrupted)": "Usa-se quando uma ação longa (Past Continuous) é interrompida por uma curta (Simple Past). Ex: 'She <b>was dancing</b> when you arrived'.",
-    "Past Perfect Continuous": "Ação contínua que ocorria antes de outra ação no passado. Ex: 'She <b>had been dancing</b> when you arrived'.",
-    "Future Continuous (Time Clause)": "Ação em progresso no futuro em um momento específico. Ex: 'He <b>will be dancing</b> when you arrive'.",
-    "Future Perfect Continuous": "Enfatiza a duração de uma ação até um ponto no futuro. Ex: 'He <b>will have been dancing</b> for two hours...'.",
-    "Conditional II": "Situação hipotética no presente/futuro (Unreal). Se eu tivesse tempo (não tenho), eu estaria dançando. Ex: 'I <b>would be dancing</b> if I had time'.",
-    "Conditional III": "Situação hipotética no passado (Impossible). Se eu tivesse tido tempo, teria estado dançando. Ex: 'I <b>would have been dancing</b> if I had had time'."
+    "Present Perfect Continuous": "Ação que começou no passado e continua (ou tem efeitos) agora. Foca na duração. Ex: 'I have been dancing since 7 AM'.",
+    "Past Continuous (Interrupted)": "Usa-se quando uma ação longa (Past Continuous) é interrompida por uma curta (Simple Past). Ex: 'She was dancing when you arrived'.",
+    "Past Perfect Continuous": "Ação contínua que ocorria antes de outra ação no passado. Ex: 'She had been dancing when you arrived'.",
+    "Future Continuous (Time Clause)": "Ação em progresso no futuro em um momento específico. Ex: 'He will be dancing when you arrive'.",
+    "Future Perfect Continuous": "Enfatiza a duração de uma ação até um ponto no futuro. Ex: 'He will have been dancing for two hours...'.",
+    "Conditional II": "Situação hipotética no presente/futuro (Unreal). Se eu tivesse tempo (não tenho), eu estaria dançando. Ex: 'I would be dancing if I had time'.",
+    "Conditional III": "Situação hipotética no passado (Impossible). Se eu tivesse tido tempo, teria estado dançando. Ex: 'I would have been dancing if I had had time'."
 };
 
 // MANTENHA VAZIO
