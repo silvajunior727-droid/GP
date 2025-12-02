@@ -382,7 +382,7 @@
                 <div id="vocab-progress-bar" class="progress-bar" style="width: 0%; background: linear-gradient(90deg, #155724, #28a745);">0%</div>
             </div>
             <div class="question-header">
-                <span class="question-counter"><span id="vocab-current-question-num">1</span> de 30</span>
+                <span class="question-counter"><span id="vocab-current-question-num">1</span> de 20</span>
                 <span class="attempts-counter" style="display: none;">Tentativas: <span id="vocab-attempts-left">Ilimitadas</span></span>
             </div>
             <div id="vocab-audio-play-container"></div>
@@ -539,9 +539,37 @@ const GRAMMAR_QUESTIONS = [
 ];
 
 // MANTENHA VAZIO PARA EVITAR ERROS
-const VOCAB_QUESTIONS = [];  
-        
+const VOCAB_QUESTIONS = [
+    // --- TOPIC: SPORTS AND ACTIVITIES (Páginas 32-34) ---
+    { type: 'mcq', question: "O que significa 'SWIMMING'?", topic: "Sports", hint: "DICA 1: Esporte na água.", hint_2: "DICA 2: Na...", options: [ { text: "Natação", isCorrect: true, rationale: "Correto! Swimming é Natação[cite: 33]." }, { text: "Ciclismo", isCorrect: false, rationale: "Incorreto. Ciclismo é Cycling." }, { text: "Dança", isCorrect: false, rationale: "Incorreto." }, { text: "Futebol", isCorrect: false, rationale: "Incorreto." } ] },
+    { type: 'mcq', question: "Traduza: 'CYCLING'.", topic: "Sports", hint: "DICA 1: Usa bicicleta.", hint_2: "DICA 2: Ci...", options: [ { text: "Ciclismo", isCorrect: true, rationale: "Correto! Cycling é Ciclismo[cite: 34]." }, { text: "Corrida", isCorrect: false, rationale: "Incorreto." }, { text: "Vôlei", isCorrect: false, rationale: "Incorreto." }, { text: "Karatê", isCorrect: false, rationale: "Incorreto." } ] },
+    { type: 'tf', question: "'Dancing' significa Dança.", topic: "Sports", hint: "DICA 1: Mexer o corpo.", hint_2: "DICA 2: Verdadeiro.", options: [ { text: "Verdadeiro", isCorrect: true, rationale: "Correto! Dancing é Dança[cite: 29]." }, { text: "Falso", isCorrect: false, rationale: "Incorreto." } ], answer: true },
+    { type: 'drag-drop', question: "Eu gosto de Karatê: I like ______.", topic: "Sports", hint: "DICA 1: Luta.", hint_2: "DICA 2: Ka...", options: ["Karate", "Tennis", "Golf"], answer: "Karate", rationale: "Correto. Karate é Karatê[cite: 36]." },
+    { type: 'mcq', question: "O que é 'VOLLEYBALL'?", topic: "Sports", hint: "DICA 1: Joga com as mãos e rede.", hint_2: "DICA 2: Vo...", options: [ { text: "Voleibol", isCorrect: true, rationale: "Correto! Volleyball é Voleibol[cite: 35]." }, { text: "Basquete", isCorrect: false, rationale: "Incorreto." }, { text: "Tênis", isCorrect: false, rationale: "Incorreto." }, { text: "Futebol", isCorrect: false, rationale: "Incorreto." } ] },
+    { type: 'fill-in', question: "I like ______ (Tênis).", topic: "Sports", hint: "DICA 1: Raquete.", hint_2: "DICA 2: Ten...", answer: ["tennis"], rationale: "Correto. Tennis[cite: 16]." },
 
+    // --- TOPIC: GRAMMAR - LIKES & SHORT ANSWERS (Páginas 36-39) ---
+    { type: 'mcq', question: "Pergunta: 'Do you like swimming?' (Não).", topic: "Grammar", hint: "DICA 1: Resposta negativa.", hint_2: "DICA 2: No...", options: [ { text: "No, I don't", isCorrect: true, rationale: "Correto! A resposta negativa curta é 'No, I don't'[cite: 61]." }, { text: "Yes, I do", isCorrect: false, rationale: "Incorreto." }, { text: "I like", isCorrect: false, rationale: "Incorreto." }, { text: "No, I do", isCorrect: false, rationale: "Incorreto." } ] },
+    { type: 'mcq', question: "Pergunta: 'Do you like cycling?' (Sim).", topic: "Grammar", hint: "DICA 1: Resposta positiva.", hint_2: "DICA 2: Ye...", options: [ { text: "Yes, I do", isCorrect: true, rationale: "Correto! A resposta positiva curta é 'Yes, I do'[cite: 62]." }, { text: "No, I don't", isCorrect: false, rationale: "Incorreto." }, { text: "Yes, I don't", isCorrect: false, rationale: "Incorreto." }, { text: "I don't", isCorrect: false, rationale: "Incorreto." } ] },
+    { type: 'drag-drop', question: "Eu amo Futebol: I ______ Soccer.", topic: "Grammar", hint: "DICA 1: Sentimento forte.", hint_2: "DICA 2: Lo...", options: ["Love", "Don't", "Do"], answer: "Love", rationale: "Correto. I love Soccer[cite: 12]." },
+    { type: 'drag-drop', question: "Eu gosto de jogos: I ______ Computer Games.", topic: "Grammar", hint: "DICA 1: Gostar.", hint_2: "DICA 2: Li...", options: ["Like", "Love", "Not"], answer: "Like", rationale: "Correto. I like Computer Games[cite: 13]." },
+
+    // --- TOPIC: FAMILY (Página 40) ---
+    { type: 'mcq', question: "Quem é 'MOM'?", topic: "Family", hint: "DICA 1: Ela cuida de você.", hint_2: "DICA 2: M...", options: [ { text: "Mãe", isCorrect: true, rationale: "Correto! Mom é Mãe[cite: 79]." }, { text: "Pai", isCorrect: false, rationale: "Incorreto." }, { text: "Irmã", isCorrect: false, rationale: "Incorreto." }, { text: "Avó", isCorrect: false, rationale: "Incorreto." } ] },
+    { type: 'mcq', question: "Traduza: 'DAD'.", topic: "Family", hint: "DICA 1: O pai.", hint_2: "DICA 2: P...", options: [ { text: "Pai", isCorrect: true, rationale: "Correto! Dad é Pai[cite: 80]." }, { text: "Irmão", isCorrect: false, rationale: "Incorreto." }, { text: "Tio", isCorrect: false, rationale: "Incorreto." }, { text: "Avô", isCorrect: false, rationale: "Incorreto." } ] },
+    { type: 'fill-in', question: "This is my ______ (Irmão).", topic: "Family", hint: "DICA 1: Menino.", hint_2: "DICA 2: Bro...", answer: ["brother"], rationale: "Correto. Brother é Irmão[cite: 82]." },
+    { type: 'fill-in', question: "This is my ______ (Irmã).", topic: "Family", hint: "DICA 1: Menina.", hint_2: "DICA 2: Sis...", answer: ["sister"], rationale: "Correto. Sister é Irmã[cite: 81]." },
+
+    // --- TOPIC: FOOD (Páginas 42-43) ---
+    { type: 'mcq', question: "O que é 'HAM'?", topic: "Food", hint: "DICA 1: Sanduíche.", hint_2: "DICA 2: Pre...", options: [ { text: "Presunto", isCorrect: true, rationale: "Correto! Ham é Presunto[cite: 88]." }, { text: "Queijo", isCorrect: false, rationale: "Incorreto." }, { text: "Pão", isCorrect: false, rationale: "Incorreto." }, { text: "Carne", isCorrect: false, rationale: "Incorreto." } ] },
+    { type: 'mcq', question: "O que é 'CHICKEN'?", topic: "Food", hint: "DICA 1: Ave.", hint_2: "DICA 2: Fr...", options: [ { text: "Frango", isCorrect: true, rationale: "Correto! Chicken é Frango[cite: 98]." }, { text: "Peixe", isCorrect: false, rationale: "Incorreto." }, { text: "Bife", isCorrect: false, rationale: "Incorreto." }, { text: "Ovo", isCorrect: false, rationale: "Incorreto." } ] },
+    { type: 'tf', question: "'Steak' significa Bife.", topic: "Food", hint: "DICA 1: Carne.", hint_2: "DICA 2: Verdadeiro.", options: [ { text: "Verdadeiro", isCorrect: true, rationale: "Correto! Steak é Bife[cite: 108]." }, { text: "Falso", isCorrect: false, rationale: "Incorreto." } ], answer: true },
+    { type: 'drag-drop', question: "Bebida branca: ______.", topic: "Food", hint: "DICA 1: Vaca.", hint_2: "DICA 2: Mi...", options: ["Milk", "Coffee", "Juice"], answer: "Milk", rationale: "Correto. Milk é Leite[cite: 96]." },
+    
+    // --- TOPIC: WEEKLY MENU (Página 47) ---
+    { type: 'mcq', question: "Qual dia é 'MONDAY'?", topic: "Days", hint: "DICA 1: Começa a semana de aula.", hint_2: "DICA 2: Seg...", options: [ { text: "Segunda-feira", isCorrect: true, rationale: "Correto! Monday é Segunda-feira[cite: 122]." }, { text: "Sexta-feira", isCorrect: false, rationale: "Incorreto." }, { text: "Domingo", isCorrect: false, rationale: "Incorreto." }, { text: "Terça-feira", isCorrect: false, rationale: "Incorreto." } ] },
+    { type: 'mcq', question: "Qual dia é 'FRIDAY'?", topic: "Days", hint: "DICA 1: Último dia de aula.", hint_2: "DICA 2: Sex...", options: [ { text: "Sexta-feira", isCorrect: true, rationale: "Correto! Friday é Sexta-feira[cite: 129]." }, { text: "Segunda-feira", isCorrect: false, rationale: "Incorreto." }, { text: "Quarta-feira", isCorrect: false, rationale: "Incorreto." }, { text: "Sábado", isCorrect: false, rationale: "Incorreto." } ] }
+];
 // --- FUNÇÕES COMPARTILHADAS DE LÓGICA ---
 
         function shuffleArray(array) {
