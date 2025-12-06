@@ -507,17 +507,28 @@
 };
 
 // BLOCO UNIFICADO COM 60 QUESTÕES
+const TOPIC_SUMMARIES = {
+    "Personal Pronouns": "Pessoais: I, You, He, She, It, We, They (Sujeito) / Me, You, Him, Her, It, Us, Them (Objeto).",
+    "Possessives": "Possessivos: My/Mine (Meu), Your/Yours (Seu), Her/Hers (Dela), Our/Ours (Nosso), Their/Theirs (Deles).",
+    "Interrogatives": "Interrogativos: Who (Quem), What (O que), Where (Onde), When (Quando), Why (Por que), Whose (De quem).",
+    "Reflexives": "Reflexivos: Myself, Yourself, Himself, Herself, Itself, Ourselves, Yourselves, Themselves.",
+    "Articles": "Artigos: A (Um/Uma + Consoante), An (Um/Uma + Vogal), The (O/A - Específico)."
+};
+
+// BLOCO UNIFICADO COM 60 QUESTÕES CORRIGIDAS
 const GRAMMAR_QUESTIONS = [
     // --- PERSONAL PRONOUNS (Subject & Object) - 12 Questões ---
     { type: 'mcq', question: "Ana is my friend. ___ is happy.", topic: "Personal Pronouns", hint: "DICA 1: Ela.", hint_2: "DICA 2: Sh...", options: [ { text: "She", isCorrect: true, rationale: "Correto! Ana é 'She'." }, { text: "He", isCorrect: false, rationale: "Incorreto." }, { text: "It", isCorrect: false, rationale: "Incorreto." }, { text: "They", isCorrect: false, rationale: "Incorreto." } ] },
     { type: 'mcq', question: "Pedro and I are students. ___ study here.", topic: "Personal Pronouns", hint: "DICA 1: Nós.", hint_2: "DICA 2: W...", options: [ { text: "We", isCorrect: true, rationale: "Correto! Pedro + Eu = Nós (We)." }, { text: "They", isCorrect: false, rationale: "Incorreto." }, { text: "You", isCorrect: false, rationale: "Incorreto." }, { text: "I", isCorrect: false, rationale: "Incorreto." } ] },
     { type: 'fill-in', question: "Call ______ (eu) later, please.", topic: "Personal Pronouns", hint: "DICA 1: Pronome objeto.", hint_2: "DICA 2: M...", answer: ["me"], rationale: "Correto. Call me (me ligue)." },
     { type: 'fill-in', question: "Look at the dog. Look at ______.", topic: "Personal Pronouns", hint: "DICA 1: Animal.", hint_2: "DICA 2: I...", answer: ["it"], rationale: "Correto. Usamos It para animais/coisas." },
-    { type: 'drag-drop', question: "Substitua 'The boys': ______ play soccer.", topic: "Personal Pronouns", hint: "DICA 1: Eles.", hint_2: "DICA 2: The...", options: ["They", "We", "He"], answer: "They", rationale: "Correto. The boys = Eles (They)." },
+    // CORRIGIDA (5)
+    { type: 'drag-drop', question: "Substitua 'The boys': ______ play soccer.", topic: "Personal Pronouns", hint: "DICA 1: Eles.", hint_2: "DICA 2: The...", options: [{text: "They", isCorrect: true}, {text: "We", isCorrect: false}, {text: "He", isCorrect: false}], rationale: "Correto. The boys = Eles (They)." },
     { type: 'mcq', question: "I love my mom. I help ___.", topic: "Personal Pronouns", hint: "DICA 1: Ajudá-la.", hint_2: "DICA 2: H...", options: [ { text: "Her", isCorrect: true, rationale: "Correto! Objeto (Ela) = Her." }, { text: "She", isCorrect: false, rationale: "Incorreto." }, { text: "Him", isCorrect: false, rationale: "Incorreto." }, { text: "It", isCorrect: false, rationale: "Incorreto." } ] },
     { type: 'mcq', question: "Where is John? I want to see ___.", topic: "Personal Pronouns", hint: "DICA 1: Ele (Objeto).", hint_2: "DICA 2: Hi...", options: [ { text: "Him", isCorrect: true, rationale: "Correto! See him." }, { text: "He", isCorrect: false, rationale: "Incorreto." }, { text: "His", isCorrect: false, rationale: "Incorreto." }, { text: "It", isCorrect: false, rationale: "Incorreto." } ] },
     { type: 'fill-in', question: "___ (Eles) are my parents.", topic: "Personal Pronouns", hint: "DICA 1: Plural.", hint_2: "DICA 2: Th...", answer: ["they"], rationale: "Correto. They." },
-    { type: 'drag-drop', question: "Substitua 'The cat': ___ is sleeping.", topic: "Personal Pronouns", hint: "DICA 1: Animal.", hint_2: "DICA 2: I...", options: ["It", "He", "She"], answer: "It", rationale: "Correto. It." },
+    // CORRIGIDA (9)
+    { type: 'drag-drop', question: "Substitua 'The cat': ___ is sleeping.", topic: "Personal Pronouns", hint: "DICA 1: Animal.", hint_2: "DICA 2: I...", options: [{text: "It", isCorrect: true}, {text: "He", isCorrect: false}, {text: "She", isCorrect: false}], rationale: "Correto. It." },
     { type: 'mcq', question: "Can you help ___? (Nós)", topic: "Personal Pronouns", hint: "DICA 1: Objeto de We.", hint_2: "DICA 2: U...", options: [ { text: "Us", isCorrect: true, rationale: "Correto! Help us." }, { text: "We", isCorrect: false, rationale: "Incorreto." }, { text: "Our", isCorrect: false, rationale: "Incorreto." }, { text: "They", isCorrect: false, rationale: "Incorreto." } ] },
     { type: 'fill-in', question: "Please, give ______ (ela) the book.", topic: "Personal Pronouns", hint: "DICA 1: Objeto.", hint_2: "DICA 2: He...", answer: ["her"], rationale: "Correto. Give her." },
     { type: 'tf', question: "'I' e 'Me' são usados para a mesma pessoa (Eu).", topic: "Personal Pronouns", hint: "DICA 1: Sujeito e Objeto.", hint_2: "DICA 2: Verdadeiro.", options: [ { text: "Verdadeiro", isCorrect: true, rationale: "Correto!" }, { text: "Falso", isCorrect: false, rationale: "Incorreto." } ], answer: true },
@@ -528,11 +539,13 @@ const GRAMMAR_QUESTIONS = [
     { type: 'fill-in', question: "She has a cat. It is ______ (Dela) cat.", topic: "Possessives", hint: "DICA 1: Adjetivo.", hint_2: "DICA 2: H...", answer: ["her"], rationale: "Correto. Her cat." },
     { type: 'fill-in', question: "That book is not yours, it is ______ (Dela - Pronome).", topic: "Possessives", hint: "DICA 1: Final de frase.", hint_2: "DICA 2: Her...", answer: ["hers"], rationale: "Correto. It is hers." },
     { type: 'mcq', question: "We have a house. It is ___ house.", topic: "Possessives", hint: "DICA 1: Nossa.", hint_2: "DICA 2: Ou...", options: [ { text: "Our", isCorrect: true, rationale: "Correto! Our house." }, { text: "Ours", isCorrect: false, rationale: "Incorreto." }, { text: "Us", isCorrect: false, rationale: "Incorreto." }, { text: "We", isCorrect: false, rationale: "Incorreto." } ] },
-    { type: 'drag-drop', question: "O carro deles: ______ car.", topic: "Possessives", hint: "DICA 1: Deles.", hint_2: "DICA 2: The...", options: ["Their", "Theirs", "They"], answer: "Their", rationale: "Correto. Their car." },
+    // CORRIGIDA (16)
+    { type: 'drag-drop', question: "O carro deles: ______ car.", topic: "Possessives", hint: "DICA 1: Deles.", hint_2: "DICA 2: The...", options: [{text: "Their", isCorrect: true}, {text: "Theirs", isCorrect: false}, {text: "They", isCorrect: false}], rationale: "Correto. Their car." },
     { type: 'mcq', question: "This house belongs to us. It is ___.", topic: "Possessives", hint: "DICA 1: Nossa (Pronome).", hint_2: "DICA 2: Ou...", options: [ { text: "Ours", isCorrect: true, rationale: "Correto! It is ours." }, { text: "Our", isCorrect: false, rationale: "Incorreto." }, { text: "Us", isCorrect: false, rationale: "Incorreto." }, { text: "We", isCorrect: false, rationale: "Incorreto." } ] },
     { type: 'fill-in', question: "He lost ______ (seu/dele) keys.", topic: "Possessives", hint: "DICA 1: Dele.", hint_2: "DICA 2: Hi...", answer: ["his"], rationale: "Correto. His keys." },
     { type: 'tf', question: "'My' usa-se antes de uma palavra, 'Mine' usa-se sozinho.", topic: "Possessives", hint: "DICA 1: My car / It's mine.", hint_2: "DICA 2: Verdadeiro.", options: [ { text: "Verdadeiro", isCorrect: true, rationale: "Correto!" }, { text: "Falso", isCorrect: false, rationale: "Incorreto." } ], answer: true },
-    { type: 'drag-drop', question: "Não é meu, é seu: Not mine, it's ___.", topic: "Possessives", hint: "DICA 1: Seu.", hint_2: "DICA 2: You...", options: ["Yours", "Your", "You"], answer: "Yours", rationale: "Correto. It's yours." },
+    // CORRIGIDA (22)
+    { type: 'drag-drop', question: "Não é meu, é seu: Not mine, it's ___.", topic: "Possessives", hint: "DICA 1: Seu.", hint_2: "DICA 2: You...", options: [{text: "Yours", isCorrect: true}, {text: "Your", isCorrect: false}, {text: "You", isCorrect: false}], rationale: "Correto. It's yours." },
 
     // --- INTERROGATIVE PRONOUNS (8 Questões) ---
     { type: 'mcq', question: "___ are you? I am John.", topic: "Interrogatives", hint: "DICA 1: Quem.", hint_2: "DICA 2: Wh...", options: [ { text: "Who", isCorrect: true, rationale: "Correto! Who (Quem)." }, { text: "What", isCorrect: false, rationale: "Incorreto." }, { text: "Where", isCorrect: false, rationale: "Incorreto." }, { text: "When", isCorrect: false, rationale: "Incorreto." } ] },
@@ -540,7 +553,8 @@ const GRAMMAR_QUESTIONS = [
     { type: 'mcq', question: "___ do you live? In Brazil.", topic: "Interrogatives", hint: "DICA 1: Onde.", hint_2: "DICA 2: Whe...", options: [ { text: "Where", isCorrect: true, rationale: "Correto! Where (Onde)." }, { text: "Who", isCorrect: false, rationale: "Incorreto." }, { text: "What", isCorrect: false, rationale: "Incorreto." }, { text: "When", isCorrect: false, rationale: "Incorreto." } ] },
     { type: 'fill-in', question: "___ is your birthday? In May.", topic: "Interrogatives", hint: "DICA 1: Quando.", hint_2: "DICA 2: Whe...", answer: ["when"], rationale: "Correto. When (Quando)." },
     { type: 'fill-in', question: "___ are you sad? Because I fell.", topic: "Interrogatives", hint: "DICA 1: Por que.", hint_2: "DICA 2: Wh...", answer: ["why"], rationale: "Correto. Why (Por que)." },
-    { type: 'drag-drop', question: "___ car is this? It's mine.", topic: "Interrogatives", hint: "DICA 1: De quem.", hint_2: "DICA 2: Whos...", options: ["Whose", "Who", "Why"], answer: "Whose", rationale: "Correto. Whose (De quem)." },
+    // CORRIGIDA (28)
+    { type: 'drag-drop', question: "___ car is this? It's mine.", topic: "Interrogatives", hint: "DICA 1: De quem.", hint_2: "DICA 2: Whos...", options: [{text: "Whose", isCorrect: true}, {text: "Who", isCorrect: false}, {text: "Why", isCorrect: false}], rationale: "Correto. Whose (De quem)." },
     { type: 'mcq', question: "___ time is it?", topic: "Interrogatives", hint: "DICA 1: Que horas.", hint_2: "DICA 2: Wha...", options: [ { text: "What", isCorrect: true, rationale: "Correto! What time." }, { text: "Who", isCorrect: false, rationale: "Incorreto." }, { text: "When", isCorrect: false, rationale: "Incorreto." }, { text: "Where", isCorrect: false, rationale: "Incorreto." } ] },
     { type: 'tf', question: "'Why' é usado para perguntar o tempo (Quando).", topic: "Interrogatives", hint: "DICA 1: Why = Por que.", hint_2: "DICA 2: Falso.", options: [ { text: "Verdadeiro", isCorrect: false, rationale: "Falso. Why é Por que. When é Quando." }, { text: "Falso", isCorrect: true, rationale: "Correto!" } ], answer: false },
 
@@ -550,11 +564,13 @@ const GRAMMAR_QUESTIONS = [
     { type: 'mcq', question: "She did the homework by ___.", topic: "Reflexives", hint: "DICA 1: Sozinha.", hint_2: "DICA 2: Her...", options: [ { text: "Herself", isCorrect: true, rationale: "Correto!" }, { text: "Himself", isCorrect: false, rationale: "Incorreto." }, { text: "Myself", isCorrect: false, rationale: "Incorreto." }, { text: "Yourself", isCorrect: false, rationale: "Incorreto." } ] },
     { type: 'fill-in', question: "We enjoyed ______ (nós mesmos) at the party.", topic: "Reflexives", hint: "DICA 1: Plural.", hint_2: "DICA 2: Our...", answer: ["ourselves"], rationale: "Correto. Ourselves." },
     { type: 'fill-in', question: "The cat cleaned ______ (a si mesmo).", topic: "Reflexives", hint: "DICA 1: Animal.", hint_2: "DICA 2: Its...", answer: ["itself"], rationale: "Correto. Itself." },
-    { type: 'drag-drop', question: "Eles se machucaram: They hurt ______.", topic: "Reflexives", hint: "DICA 1: Eles.", hint_2: "DICA 2: Them...", options: ["Themselves", "Ourselves", "Itself"], answer: "Themselves", rationale: "Correto. Themselves." },
+    // CORRIGIDA (36)
+    { type: 'drag-drop', question: "Eles se machucaram: They hurt ______.", topic: "Reflexives", hint: "DICA 1: Eles.", hint_2: "DICA 2: Them...", options: [{text: "Themselves", isCorrect: true}, {text: "Ourselves", isCorrect: false}, {text: "Itself", isCorrect: false}], rationale: "Correto. Themselves." },
     { type: 'mcq', question: "You (plural) need to help ___.", topic: "Reflexives", hint: "DICA 1: Vocês mesmos.", hint_2: "DICA 2: You...", options: [ { text: "Yourselves", isCorrect: true, rationale: "Correto! Plural." }, { text: "Yourself", isCorrect: false, rationale: "Incorreto (Singular)." }, { text: "You", isCorrect: false, rationale: "Incorreto." }, { text: "Themselves", isCorrect: false, rationale: "Incorreto." } ] },
     { type: 'fill-in', question: "I live by ______ (sozinho/mim mesmo).", topic: "Reflexives", hint: "DICA 1: Mim.", hint_2: "DICA 2: My...", answer: ["myself"], rationale: "Correto. By myself." },
     { type: 'tf', question: "'Himself' refere-se a ELA.", topic: "Reflexives", hint: "DICA 1: Him = Ele.", hint_2: "DICA 2: Falso.", options: [ { text: "Verdadeiro", isCorrect: false, rationale: "Falso. Himself é ELE mesmo. Herself é ELA mesma." }, { text: "Falso", isCorrect: true, rationale: "Correto!" } ], answer: false },
-    { type: 'drag-drop', question: "Cuide-se: Take care of ___.", topic: "Reflexives", hint: "DICA 1: Você.", hint_2: "DICA 2: You...", options: ["Yourself", "Myself", "Himself"], answer: "Yourself", rationale: "Correto. Yourself." },
+    // CORRIGIDA (40)
+    { type: 'drag-drop', question: "Cuide-se: Take care of ___.", topic: "Reflexives", hint: "DICA 1: Você.", hint_2: "DICA 2: You...", options: [{text: "Yourself", isCorrect: true}, {text: "Myself", isCorrect: false}, {text: "Himself", isCorrect: false}], rationale: "Correto. Yourself." },
 
     // --- ARTICLES (A, AN, THE) - 20 Questões ---
     { type: 'mcq', question: "I have ___ apple.", topic: "Articles", hint: "DICA 1: Vogal.", hint_2: "DICA 2: An...", options: [ { text: "An", isCorrect: true, rationale: "Correto! Apple começa com som de vogal." }, { text: "A", isCorrect: false, rationale: "Incorreto." }, { text: "The", isCorrect: false, rationale: "Incorreto." }, { text: "Two", isCorrect: false, rationale: "Incorreto." } ] },
@@ -564,18 +580,22 @@ const GRAMMAR_QUESTIONS = [
     { type: 'fill-in', question: "I want to buy ______ (um) car.", topic: "Articles", hint: "DICA 1: Consoante.", hint_2: "DICA 2: A...", answer: ["a"], rationale: "Correto. A car." },
     { type: 'fill-in', question: "She is ______ (uma) engineer.", topic: "Articles", hint: "DICA 1: Vogal.", hint_2: "DICA 2: An...", answer: ["an"], rationale: "Correto. An engineer." },
     { type: 'fill-in', question: "Open ______ (a) door, please.", topic: "Articles", hint: "DICA 1: Específica.", hint_2: "DICA 2: The...", answer: ["the"], rationale: "Correto. The door." },
-    { type: 'drag-drop', question: "It is ______ umbrella.", topic: "Articles", hint: "DICA 1: Vogal.", hint_2: "DICA 2: An...", options: ["An", "A", "The"], answer: "An", rationale: "Correto. An umbrella." },
-    { type: 'drag-drop', question: "______ sky is blue.", topic: "Articles", hint: "DICA 1: Único.", hint_2: "DICA 2: The...", options: ["The", "A", "An"], answer: "The", rationale: "Correto. The sky." },
+    // CORRIGIDA (48)
+    { type: 'drag-drop', question: "It is ______ umbrella.", topic: "Articles", hint: "DICA 1: Vogal.", hint_2: "DICA 2: An...", options: [{text: "An", isCorrect: true}, {text: "A", isCorrect: false}, {text: "The", isCorrect: false}], rationale: "Correto. An umbrella." },
+    // CORRIGIDA (49)
+    { type: 'drag-drop', question: "______ sky is blue.", topic: "Articles", hint: "DICA 1: Único.", hint_2: "DICA 2: The...", options: [{text: "The", isCorrect: true}, {text: "A", isCorrect: false}, {text: "An", isCorrect: false}], rationale: "Correto. The sky." },
     { type: 'mcq', question: "I need ___ hour to finish.", topic: "Articles", hint: "DICA 1: H mudo (som de A).", hint_2: "DICA 2: An...", options: [ { text: "An", isCorrect: true, rationale: "Correto! Hour tem som de vogal." }, { text: "A", isCorrect: false, rationale: "Incorreto." }, { text: "The", isCorrect: false, rationale: "Incorreto." }, { text: "It", isCorrect: false, rationale: "Incorreto." } ] },
     { type: 'mcq', question: "This is ___ university.", topic: "Articles", hint: "DICA 1: Som de 'You' (consoante).", hint_2: "DICA 2: A...", options: [ { text: "A", isCorrect: true, rationale: "Correto! University tem som de consoante (Y)." }, { text: "An", isCorrect: false, rationale: "Incorreto." }, { text: "The", isCorrect: false, rationale: "Incorreto." }, { text: "Two", isCorrect: false, rationale: "Incorreto." } ] },
     { type: 'fill-in', question: "I saw ______ (um) elephant.", topic: "Articles", hint: "DICA 1: Vogal.", hint_2: "DICA 2: An...", answer: ["an"], rationale: "Correto. An elephant." },
     { type: 'fill-in', question: "______ (A) moon is beautiful.", topic: "Articles", hint: "DICA 1: Única.", hint_2: "DICA 2: The...", answer: ["the"], rationale: "Correto. The moon." },
-    { type: 'drag-drop', question: "She eats ______ orange.", topic: "Articles", hint: "DICA 1: Vogal.", hint_2: "DICA 2: An...", options: ["An", "A", "The"], answer: "An", rationale: "Correto. An orange." },
+    // CORRIGIDA (54)
+    { type: 'drag-drop', question: "She eats ______ orange.", topic: "Articles", hint: "DICA 1: Vogal.", hint_2: "DICA 2: An...", options: [{text: "An", isCorrect: true}, {text: "A", isCorrect: false}, {text: "The", isCorrect: false}], rationale: "Correto. An orange." },
     { type: 'tf', question: "Usamos 'A' para palavras que começam com som de vogal.", topic: "Articles", hint: "DICA 1: A apple?", hint_2: "DICA 2: Falso.", options: [ { text: "Verdadeiro", isCorrect: false, rationale: "Falso. A é para consoantes. An é para vogais." }, { text: "Falso", isCorrect: true, rationale: "Correto!" } ], answer: false },
     { type: 'mcq', question: "Do you have ___ pen?", topic: "Articles", hint: "DICA 1: Qualquer caneta.", hint_2: "DICA 2: A...", options: [ { text: "A", isCorrect: true, rationale: "Correto! A pen." }, { text: "An", isCorrect: false, rationale: "Incorreto." }, { text: "The", isCorrect: false, rationale: "Incorreto (se for qualquer uma)." }, { text: "Two", isCorrect: false, rationale: "Incorreto." } ] },
     { type: 'fill-in', question: "It is ______ (uma) igloo.", topic: "Articles", hint: "DICA 1: Vogal.", hint_2: "DICA 2: An...", answer: ["an"], rationale: "Correto. An igloo." },
     { type: 'mcq', question: "___ internet is slow.", topic: "Articles", hint: "DICA 1: Específico.", hint_2: "DICA 2: The...", options: [ { text: "The", isCorrect: true, rationale: "Correto! A internet (definida)." }, { text: "A", isCorrect: false, rationale: "Incorreto." }, { text: "An", isCorrect: false, rationale: "Incorreto." }, { text: "One", isCorrect: false, rationale: "Incorreto." } ] },
-    { type: 'drag-drop', question: "______ yellow car.", topic: "Articles", hint: "DICA 1: Som de consoante.", hint_2: "DICA 2: A...", options: ["A", "An", "The"], answer: "A", rationale: "Correto. A yellow car (Y tem som de consoante)." },
+    // CORRIGIDA (59)
+    { type: 'drag-drop', question: "______ yellow car.", topic: "Articles", hint: "DICA 1: Som de consoante.", hint_2: "DICA 2: A...", options: [{text: "A", isCorrect: true}, {text: "An", isCorrect: false}, {text: "The", isCorrect: false}], rationale: "Correto. A yellow car (Y tem som de consoante)." },
     { type: 'tf', question: "'The' é o Artigo Definido.", topic: "Articles", hint: "DICA 1: Define algo.", hint_2: "DICA 2: Verdadeiro.", options: [ { text: "Verdadeiro", isCorrect: true, rationale: "Correto!" }, { text: "Falso", isCorrect: false, rationale: "Incorreto." } ], answer: true }
 ];
 
@@ -1685,6 +1705,7 @@ const quizBase = {
 </body>
 
 </html>
+
 
 
 
