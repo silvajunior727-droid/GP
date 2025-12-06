@@ -473,41 +473,32 @@
         
        const STUDENT_DATA = {
     "119AU": "AURELIO",
-   	"195AC": "ANA CAROLINA",
-	"205AN": "ANINHA",
-	"120BR": "BRUNA",
-	"123EL": "ELMA",
-	"335FX": "FABRÍCIO",
-	"285MS": "MIGUELZINHO",
-	"337YF": "YAGUINHO",
-	"123MR": "MARI",
-	"225NC": "NICOLAS",
-	"354GE": "GEOVANNA",
-	"224DM": "DIMI",
-	"245SC": "SURI",
-	"784TO": "TAINÁ",
-	"432PB": "PABLO",
-	"557KS": "KAUÃ",
-	"213GI": "GIOVANNA",
-	"442JQ": "JOAQUIM",
-	"865PM": "PÂMELA",
-	"224YN": "YASMIN",
-	"358MC": "MAICON",	
-	"642MQ": "MONIQUE",
+    "195AC": "ANA CAROLINA",
+    "205AN": "ANINHA",
+    "120BR": "BRUNA",
+    "123EL": "ELMA",
+    "335FX": "FABRÍCIO",
+    "285MS": "MIGUELZINHO",
+    "337YF": "YAGUINHO",
+    "123MR": "MARI",
+    "225NC": "NICOLAS",
+    "354GE": "GEOVANNA",
+    "224DM": "DIMI",
+    "245SC": "SURI",
+    "784TO": "TAINÁ",
+    "432PB": "PABLO",
+    "557KS": "KAUÃ",
+    "213GI": "GIOVANNA",
+    "442JQ": "JOAQUIM",
+    "865PM": "PÂMELA",
+    "224YN": "YASMIN",
+    "358MC": "MAICON",    
+    "642MQ": "MONIQUE",
     "901JR": "JÚNIOR" // Mantido como solicitado
 };
 
 
-        const TOPIC_SUMMARIES = {
-    "Personal Pronouns": "Pessoais: I, You, He, She, It, We, They (Sujeito) / Me, You, Him, Her, It, Us, Them (Objeto).",
-    "Possessives": "Possessivos: My/Mine (Meu), Your/Yours (Seu), Her/Hers (Dela), Our/Ours (Nosso), Their/Theirs (Deles).",
-    "Interrogatives": "Interrogativos: Who (Quem), What (O que), Where (Onde), When (Quando), Why (Por que), Whose (De quem).",
-    "Reflexives": "Reflexivos: Myself, Yourself, Himself, Herself, Itself, Ourselves, Yourselves, Themselves.",
-    "Articles": "Artigos: A (Um/Uma + Consoante), An (Um/Uma + Vogal), The (O/A - Específico)."
-};
-
-// BLOCO UNIFICADO COM 60 QUESTÕES
-const TOPIC_SUMMARIES = {
+    const TOPIC_SUMMARIES = {
     "Personal Pronouns": "Pessoais: I, You, He, She, It, We, They (Sujeito) / Me, You, Him, Her, It, Us, Them (Objeto).",
     "Possessives": "Possessivos: My/Mine (Meu), Your/Yours (Seu), Her/Hers (Dela), Our/Ours (Nosso), Their/Theirs (Deles).",
     "Interrogatives": "Interrogativos: Who (Quem), What (O que), Where (Onde), When (Quando), Why (Por que), Whose (De quem).",
@@ -761,7 +752,8 @@ const quizBase = {
         // 2. PROTEÇÃO DE CÓDIGO (Corrige o erro "Not Running")
         // Verifica se o input existe antes de tentar ler o valor
         let code = this.validatedStudentCode;
-        if (this.elements.studentCodeInput) {
+        // Se ainda não tem código validado, tenta pegar do input (apenas para o quizApp principal)
+        if (!code && this.elements.studentCodeInput) {
             const inputVal = this.elements.studentCodeInput.value.trim().toUpperCase();
             if (inputVal) code = inputVal;
         }
@@ -793,6 +785,11 @@ const quizBase = {
             
             // Garante que as questões existem
             if (!this.initialQuestions || this.initialQuestions.length === 0) {
+                // Se for vocab e estiver vazio, avisa, mas não crasha
+                if(this.elements.quizCard.id === 'vocab-quiz-card') {
+                    alert("O Quiz de Vocabulário ainda não tem questões cadastradas.");
+                    return;
+                }
                 alert("Erro: Questões não carregadas. Recarregue a página.");
                 return;
             }
@@ -930,12 +927,11 @@ const quizBase = {
         this.elements.optionsList.appendChild(checkButton);
     },
     
-    renderDragDrop: function(q, num) { // Certifique-se que recebe (q, num)
+    renderDragDrop: function(q, num) { 
         const dropZone = document.createElement('span');
         dropZone.id = 'drop-zone';
-        dropZone.textContent = '???'; // <--- MUDANÇA AQUI (Texto curto)
+        dropZone.textContent = '???';
         
-        // Mantém a lógica de mostrar o número original
         const displayNum = num || (this.currentQuestionIndex + 1); 
         const questionTextHTML = `<strong>${displayNum}.</strong>&nbsp;` + q.question.replace('______', dropZone.outerHTML);
         
@@ -959,19 +955,22 @@ const quizBase = {
 
         this.shuffleArray(q.options).forEach(opt => {
             const optionEl = document.createElement('div');
-            optionEl.textContent = opt;
+            // CORREÇÃO CRÍTICA: opt é um objeto, precisamos de opt.text
+            optionEl.textContent = opt.text; 
             optionEl.className = 'drag-option';
             optionEl.draggable = true; 
             
             optionEl.ondragstart = (e) => { 
-                e.dataTransfer.setData('text/plain', opt);
+                // CORREÇÃO: arrastar opt.text, não o objeto
+                e.dataTransfer.setData('text/plain', opt.text);
                 optionEl.classList.add('is-dragging');
             };
             optionEl.ondragend = () => { optionEl.classList.remove('is-dragging'); };
 
             optionEl.onclick = () => {
                 if (actualDropZone.classList.contains('correct') || actualDropZone.classList.contains('incorrect')) return;
-                this.processDrop(actualDropZone, opt, q);
+                // CORREÇÃO: passar opt.text
+                this.processDrop(actualDropZone, opt.text, q);
             };
 
             dragOptionsWrapper.appendChild(optionEl);
@@ -995,14 +994,22 @@ const quizBase = {
     },
 
     processDrop: function(dropZoneEl, selectedValue, questionObj) {
-        const isCorrect = (selectedValue.toLowerCase() === questionObj.answer.toLowerCase());
+        // CORREÇÃO: Se selectedValue for undefined (erro de drag), aborta
+        if(!selectedValue) return;
+
+        // Verifica resposta (comparando com a opção marcada como isCorrect no objeto original)
+        // Como o selectedValue é texto, precisamos achar se esse texto é o correto
+        const correctOptionObj = questionObj.options.find(o => o.isCorrect);
+        const correctText = correctOptionObj ? correctOptionObj.text : '';
+
+        const isCorrect = (selectedValue.trim().toLowerCase() === correctText.trim().toLowerCase());
         
         dropZoneEl.textContent = selectedValue;
         dropZoneEl.classList.remove('filled', 'correct', 'incorrect');
         dropZoneEl.classList.add('filled');
         dropZoneEl.classList.add(isCorrect ? 'correct' : 'incorrect');
         
-        this.handleAnswer(isCorrect, questionObj.rationale, selectedValue, questionObj.answer);
+        this.handleAnswer(isCorrect, questionObj.rationale, selectedValue, correctText);
         
         const allOptions = this.elements.optionsList.querySelectorAll('.drag-option');
         allOptions.forEach(el => el.classList.add('disabled'));
@@ -1705,12 +1712,3 @@ const quizBase = {
 </body>
 
 </html>
-
-
-
-
-
-
-
-
-
