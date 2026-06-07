@@ -1,0 +1,1526 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>COPA DO MUNDO - 2026</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 50px;
+            color: #333;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 800px;
+            min-height: 400px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            text-align: center;
+            color: salmon;
+        }
+        
+        h2 {
+            text-align: center;
+            color: #444;
+        }
+
+        .question-card, .results-card, .intro-card {
+            display: none;
+            flex-direction: column;
+        }
+
+        .intro-card {
+            display: flex;
+            text-align: center;
+        }
+
+        .intro-card input {
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+            box-sizing: border-box;
+            text-transform: uppercase;
+        }
+
+        .topic-summary {
+            background-color: #e0f7fa;
+            border-left: 5px solid #00bcd4;
+            padding: 10px 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            font-size: 0.95rem;
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .options-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-item {
+            background-color: #e9ecef;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .option-item:hover {
+            background-color: #e0f7e0;
+        }
+
+        .option-item.correct {
+            background-color: lightgreen;
+            color: #000;
+            font-weight: bold;
+            transform: scale(1.02);
+            box-shadow: 0 4px 8px rgba(144, 238, 144, 0.5);
+            pointer-events: none;
+        }
+
+        .option-item.incorrect {
+            background-color: salmon;
+            color: white;
+            font-weight: bold;
+            animation: shake 0.5s ease-in-out;
+            box-shadow: 0 4px 8px rgba(250, 128, 114, 0.5);
+            pointer-events: none;
+        }
+
+        /* Drag and Drop / Fill in styles */
+        .interactive-area {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .drop-zone {
+            min-width: 200px;
+            min-height: 50px;
+            border: 2px dashed #888;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #fafafa;
+            font-weight: bold;
+            color: #666;
+            transition: background-color 0.3s;
+        }
+
+        .drop-zone.dragover {
+            background-color: #d1ecf1;
+            border-color: #0c5460;
+        }
+
+        .drag-options {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .drag-item {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            user-select: none;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .drag-item:active {
+            transform: scale(0.95);
+        }
+
+        .fill-in-input {
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 80%;
+            max-width: 300px;
+            text-align: center;
+            text-transform: lowercase;
+        }
+
+        .submit-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .justification {
+            margin-top: 10px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-left: 5px solid lightgreen;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .feedback {
+            margin-top: 15px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .next-btn, .skip-btn, .hint-btn {
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 20px;
+            display: none;
+            float: right;
+            margin-left: 10px;
+            font-weight: bold;
+        }
+
+        .next-btn {
+            background-color: lightgreen;
+            color: #000;
+        }
+
+        .skip-btn {
+            background-color: salmon;
+            color: white;
+        }
+
+        .hint-btn {
+            background-color: salmon;
+            color: white;
+            display: inline-block;
+            float: none;
+        }
+
+        .hint-text {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #e9ecef;
+            border-left: 5px solid salmon;
+            border-radius: 5px;
+            font-style: italic;
+            display: none;
+        }
+
+        .question-actions {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+            width: 100%;
+        }
+        
+        .start-btn, .restart-btn, .print-btn, .continue-btn {
+            display: inline-block;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 20px;
+            text-align: center;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .start-btn, .print-btn, .continue-btn {
+            background-color: lightgreen;
+            color: #000;
+        }
+
+        .restart-btn {
+            background-color: salmon;
+            color: white;
+        }
+
+        .results-actions {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .results-card h2 {
+            margin-bottom: 20px;
+        }
+
+        .results-card p {
+            font-size: 1.1rem;
+            line-height: 1.5;
+        }
+
+        .results-card .score-display {
+            font-size: 2rem;
+            font-weight: bold;
+            color: lightgreen;
+            text-shadow: 1px 1px 2px #000;
+            margin-top: 10px;
+        }
+
+        .attempts-counter {
+            text-align: right;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        .question-counter {
+            text-align: left;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        .incorrect-questions-list {
+            margin-top: 30px;
+            border-top: 2px solid #ccc;
+            padding-top: 20px;
+        }
+
+        .incorrect-questions-list h3 {
+            color: salmon;
+            margin-bottom: 15px;
+        }
+
+        .incorrect-question-item {
+            background-color: #fff3f3;
+            border: 1px solid salmon;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+
+        @media print {
+            body { background-color: #fff; padding-top: 0; display: block; }
+            .container { box-shadow: none; border: none; width: 100%; max-width: none; min-height: auto; }
+            #intro-card, #quiz-card, .results-actions, .print-btn, .attempts-counter, .question-counter { display: none !important; }
+            #results-card { display: block !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div id="intro-card" class="intro-card">
+            <h1></h1>
+            <h2>COPA DO MUNDO 2026</h2>
+            <p id="personalized-welcome" style="font-size: 1.4rem; font-weight: bold; margin-top: 10px; color: salmon;">Olá, Amigo (a) - grato por sua visita!!!</p>
+            <p id="quiz-description">Por favor, insira seu código de acesso para iniciar sua diversão. Este teste aborda tudo a respeito da COPA DO MUNDO 2026.</p>
+            <input type="text" id="student-code" placeholder="Digite seu Código de Acesso">
+            <div id="start-actions">
+                <button class="start-btn" onclick="quizApp.startQuiz()">Iniciar / Continuar Quiz</button>
+                <button class="continue-btn" onclick="quizApp.jumpToReport()" style="background-color: #ffc107;">Já fiz o Quiz (Ver Relatório)</button>
+            </div>
+        </div>
+
+        <div id="quiz-card" class="question-card">
+            <div class="attempts-counter">Tentativas restantes: <span id="attempts-left">Ilimitadas</span></div>
+            <div class="question-counter">Questão <span id="current-question-num">1</span> de <span id="total-questions"></span></div>
+            
+            <div id="progress-bar-container" style="display: flex; height: 12px; background: #e9ecef; border-radius: 5px; overflow: hidden; margin-bottom: 20px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);">
+                <div id="progress-correct" style="width: 0%; background: lightgreen; transition: width 0.3s;"></div>
+                <div id="progress-incorrect" style="width: 0%; background: salmon; transition: width 0.3s;"></div>
+            </div>
+
+            <div id="topic-summary" class="topic-summary"></div>
+            <div id="question-text" class="question-text"></div>
+            
+            <div id="interactive-container" class="interactive-area"></div>
+            <ul id="options-list" class="options-list"></ul>
+            
+            <div id="hint-container">
+                <button id="hint-button" class="hint-btn" onclick="quizApp.showHint()">Mostrar Dica</button>
+                <div id="hint-text" class="hint-text"></div>
+            </div>
+            <div id="justification-text" class="justification"></div>
+            <div class="question-actions">
+                <button id="skip-button" class="skip-btn" onclick="quizApp.skipQuestion()">Pular Questão</button>
+                <button id="next-button" class="next-btn" onclick="quizApp.nextQuestion()">Próxima Questão</button>
+            </div>
+        </div>
+
+        <div id="results-card" class="results-card">
+            <h1>Relatório de Desempenho</h1>
+            <p><strong>Nome:</strong> <span id="report-student-name"></span></p>
+            <p><strong>Código de Acesso:</strong> <span id="report-student-code"></span></p>
+            <p><strong>Pontuação:</strong> <span id="score-display" class="score-display"></span> / <span id="total-score"></span></p>
+            <p><strong>Percentual de Acerto:</strong> <span id="percentage-display"></span></p>
+            
+            <div class="results-actions">
+                <button class="restart-btn" onclick="quizApp.restartQuiz()">Reiniciar Teste</button>
+                <button class="print-btn" onclick="window.print()">Imprimir/Salvar Relatório</button> 
+            </div>
+            <div id="incorrect-questions-container" class="incorrect-questions-list"></div>
+        </div>
+    </div>
+
+    <script>
+const TOPIC_SUMMARIES = {
+            "América do Sul": "Seleções da CONMEBOL: conhecidas pelo futebol habilidoso, rivalidade intensa e por abrigarem alguns dos maiores campeões mundiais da história.",
+            "América do Norte (País-Sede)": "As nações anfitriãs da Copa de 2026! Um marco histórico onde Canadá, Estados Unidos e México dividem a organização do torneio.",
+            "Europa": "Seleções da UEFA: o continente com o maior número de participantes, berço das ligas mais ricas do mundo e times extremamente táticos.",
+            "África": "Seleções da CAF: nações africanas marcadas por muita força física, velocidade, alegria em campo e que vêm quebrando recordes em Copas recentes.",
+            "Ásia": "Seleções da AFC: países que investem cada vez mais no esporte, apresentando times disciplinados, rápidos e torcidas que dão show nas arquibancadas.",
+            "Ásia (Geograficamente Oceania)": "Uma curiosidade geográfica! Países que ficam na Oceania, mas que disputam as eliminatórias pela Ásia em busca de maior nível competitivo.",
+            "América do Norte, Central e Caribe": "Seleções da CONCACAF: além dos países-sede, esta região traz nações da América Central e arquipélagos caribenhos buscando fazer história."
+        };
+
+        const quizApp = {
+            currentQuestionIndex: 0,
+            score: 0,
+            hintClicks: 0,
+            validatedStudentName: '',
+            validatedStudentCode: '',
+            incorrectAnswers: [],
+            
+        studentData: {
+                "472XM": "BERNARDO", 
+                "819TS": "DAVI",
+                "365KS": "HELENA", 
+                "294BS": "HELOISA",
+                "581YS": "ISABELLA", 
+                "736PF": "JOANA",
+	        "301EL": "LAVINIA",
+                "158DJ": "SOFIA", 
+                "JR123": "JUNIOR"
+            },
+
+            questions: [
+// ==========================================
+    // BLOCO 1 - SELEÇÕES 1 A 12
+    // ==========================================
+
+    { 
+        type: 'mcq', 
+        question: "1. De qual seleção participante estamos falando?", 
+        topic: "África", 
+        hint: "Eles foram os anfitriões da Copa do Mundo de 2010.", 
+        hint_2: "A seleção é carinhosamente conhecida como 'Bafana Bafana'.", 
+        hint_3: "Suas cores principais no uniforme são amarelo e verde.",
+        hint_4: "É a terra natal de Nelson Mandela.",
+        options: [
+            { text: "Nigéria", isCorrect: false, rationale: "A Nigéria veste verde e branco (Super Águias)." }, 
+            { text: "África do Sul", isCorrect: true, rationale: "Correto! A África do Sul sediou o mundial de 2010." }, 
+            { text: "Senegal", isCorrect: false, rationale: "Senegal nunca sediou uma Copa do Mundo." }, 
+            { text: "Camarões", isCorrect: false, rationale: "Camarões é conhecido como Leões Indomáveis." }
+        ] 
+    },
+
+    { 
+        type: 'drag-drop', 
+        question: "2. A seleção tetracampeã mundial que impôs o placar de 7x1 no Brasil é a ______.", 
+        topic: "Europa", 
+        hint: "É um país europeu com muita tradição.", 
+        hint_2: "Seu uniforme principal é tradicionalmente branco e preto.", 
+        hint_3: "Foi a sede da Eurocopa de 2024.",
+        hint_4: "Venceram a Copa de 2014 no Brasil.",
+        options: ["Espanha", "Alemanha", "França"], 
+        answer: "Alemanha", 
+        rationale: "Correto! A Alemanha é a tetracampeã mundial que venceu a Copa de 2014." 
+    },
+
+    { 
+        type: 'tf', 
+        question: "3. A Arábia Saudita surpreendeu o mundo ao vencer a Argentina na estreia da Copa de 2022.", 
+        topic: "Ásia", 
+        hint: "É um país do Oriente Médio.", 
+        hint_2: "Sua liga nacional de futebol contratou recentemente Cristiano Ronaldo e Neymar.", 
+        hint_3: "A seleção é apelidada de 'Falcões Verdes'.",
+        hint_4: "Eles usam um uniforme predominantemente verde.",
+        options: [
+            { text: "Verdadeiro", isCorrect: true, rationale: "Correto! Eles venceram a Argentina por 2x1 na estreia em 2022." }, 
+            { text: "Falso", isCorrect: false, rationale: "Errado! A vitória realmente aconteceu e foi uma grande zebra histórica." }
+        ], 
+        answer: true 
+    },
+
+    { 
+        type: 'fill-in', 
+        question: "4. Qual é a seleção do Norte da África conhecida como 'As Raposas do Deserto'?", 
+        topic: "África", 
+        hint: "Grande parte de seu território é coberto pelo deserto do Saara.", 
+        hint_2: "Riyad Mahrez é um dos maiores ídolos do país.", 
+        hint_3: "Seu uniforme é branco com detalhes em verde.",
+        hint_4: "O nome do país começa com 'A' e tem 7 letras.",
+        answer: ["argélia", "Argélia", "ARGÉLIA"], 
+        rationale: "Correto! A Argélia é mundialmente famosa como as Raposas do Deserto." 
+    },
+
+    { 
+        type: 'mcq', 
+        question: "5. De qual seleção participante estamos falando?", 
+        topic: "América do Sul", 
+        hint: "Eles chegarão à Copa de 2026 defendendo o título de atuais campeões mundiais.", 
+        hint_2: "Sua camisa tradicional possui listras verticais em azul claro e branco.", 
+        hint_3: "Venceram as Copas de 1978, 1986 e 2022.",
+        hint_4: "É a terra de craques históricos como Diego Maradona e Lionel Messi.",
+        options: [
+            { text: "França", isCorrect: false, rationale: "A França perdeu a final de 2022 para esta seleção." }, 
+            { text: "Itália", isCorrect: false, rationale: "A Itália usa camisa totalmente azul (Azzurra)." }, 
+            { text: "Argentina", isCorrect: true, rationale: "Correto! A Argentina é a atual tricampeã mundial." }, 
+            { text: "Uruguai", isCorrect: false, rationale: "O Uruguai é bicampeão mundial." }
+        ] 
+    },
+
+    { 
+        type: 'drag-drop', 
+        question: "6. Os 'Socceroos' é o apelido carinhoso da seleção da ______.", 
+        topic: "Ásia (Geograficamente Oceania)", 
+        hint: "Geograficamente, é o maior país da Oceania.", 
+        hint_2: "Eles disputam as eliminatórias pela Ásia para ter jogos mais competitivos.", 
+        hint_3: "Famoso por ser o país dos cangurus.",
+        hint_4: "No futebol, suas cores são o amarelo e o verde.",
+        options: ["Austrália", "Nova Zelândia", "África do Sul"], 
+        answer: "Austrália", 
+        rationale: "Correto! A Austrália mudou de confederação e é conhecida como Socceroos." 
+    },
+
+    { 
+        type: 'tf', 
+        question: "7. A Áustria é um país cuja seleção veste vermelho e branco e que tem o idioma espanhol como oficial.", 
+        topic: "Europa", 
+        hint: "É um país localizado na Europa Central.", 
+        hint_2: "Ficou famosa pela geração de jogadores como David Alaba.", 
+        hint_3: "É a terra natal do músico clássico Mozart.",
+        hint_4: "Eles falam alemão, não espanhol.",
+        options: [
+            { text: "Verdadeiro", isCorrect: false, rationale: "Errado! A Áustria fala alemão, não espanhol." }, 
+            { text: "Falso", isCorrect: true, rationale: "Correto! O idioma oficial da Áustria é o alemão." }
+        ], 
+        answer: false 
+    },
+
+    { 
+        type: 'fill-in', 
+        question: "8. Qual é a seleção conhecida como 'Os Diabos Vermelhos' comandada por Kevin De Bruyne?", 
+        topic: "Europa", 
+        hint: "É o país que abriga a sede da União Europeia.", 
+        hint_2: "Eles eliminaram o Brasil nas quartas de final da Copa de 2018.", 
+        hint_3: "Falam francês, holandês e alemão no país.",
+        hint_4: "O nome do país tem 7 letras e começa com 'B'.",
+        answer: ["bélgica", "Bélgica", "BÉLGICA"], 
+        rationale: "Correto! A Bélgica é a casa dos Diabos Vermelhos." 
+    },
+
+    { 
+        type: 'mcq', 
+        question: "9. De qual seleção participante estamos falando?", 
+        topic: "Europa", 
+        hint: "É um país do leste europeu, formado após a separação da Iugoslávia.", 
+        hint_2: "Sua única participação anterior em Copas do Mundo foi no Brasil, em 2014.", 
+        hint_3: "O uniforme principal é azul com detalhes em amarelo.",
+        hint_4: "O atacante Edin Džeko é o maior jogador da história do país.",
+        options: [
+            { text: "Sérvia", isCorrect: false, rationale: "A Sérvia veste vermelho e tem o Mitrović como ídolo." }, 
+            { text: "Croácia", isCorrect: false, rationale: "A Croácia tem o uniforme quadriculado e joga Copas desde 1998." }, 
+            { text: "Bósnia e Herzegovina", isCorrect: true, rationale: "Correto! A Bósnia participou da Copa apenas em 2014." }, 
+            { text: "Montenegro", isCorrect: false, rationale: "Montenegro veste vermelho e ainda não jogou uma Copa." }
+        ] 
+    },
+
+    { 
+        type: 'drag-drop', 
+        question: "10. A única seleção que participou de todas as Copas do Mundo é o ______.", 
+        topic: "América do Sul", 
+        hint: "Suas cores principais são o amarelo e o azul.", 
+        hint_2: "É famosa mundialmente como o 'País do Futebol'.", 
+        hint_3: "Única nação Pentacampeã mundial (5 títulos).",
+        hint_4: "Terra de lendas como Pelé e Ronaldo.",
+        options: ["Brasil", "Alemanha", "Itália"], 
+        answer: "Brasil", 
+        rationale: "Correto! O Brasil nunca ficou de fora de uma edição da Copa do Mundo." 
+    },
+
+    { 
+        type: 'tf', 
+        question: "11. A seleção de Cabo Verde fará sua estreia absoluta em Copas do Mundo em 2026.", 
+        topic: "África", 
+        hint: "É um pequeno arquipélago (conjunto de ilhas).", 
+        hint_2: "Fica na costa oeste da África e tem o português como idioma oficial.", 
+        hint_3: "Eles são apelidados de 'Tubarões Azuis'.",
+        hint_4: "Eles conseguiram uma classificação histórica nesta edição.",
+        options: [
+            { text: "Verdadeiro", isCorrect: true, rationale: "Correto! A Copa de 2026 marcará a primeira participação de Cabo Verde." }, 
+            { text: "Falso", isCorrect: false, rationale: "Errado! Eles realmente farão sua estreia em 2026." }
+        ], 
+        answer: true 
+    },
+
+    { 
+        type: 'mcq', 
+        question: "12. De qual seleção participante estamos falando?", 
+        topic: "América do Norte (País-Sede)", 
+        hint: "É um dos três países que vão sediar a Copa de 2026.", 
+        hint_2: "O esporte número um do país é o Hóquei no Gelo.", 
+        hint_3: "Tem uma folha de bordo (Maple Leaf) na bandeira e no escudo.",
+        hint_4: "Alphonso Davies é o principal jogador da nação.",
+        options: [
+            { text: "Estados Unidos", isCorrect: false, rationale: "A bandeira dos EUA tem estrelas e listras." }, 
+            { text: "México", isCorrect: false, rationale: "O esporte forte no México é o futebol e a bandeira tem uma águia." }, 
+            { text: "Canadá", isCorrect: true, rationale: "Correto! O Canadá é um dos países-sede e a terra da folha de bordo." }, 
+            { text: "Suíça", isCorrect: false, rationale: "A Suíça não será sede, apesar do clima frio." }
+        ] 
+    },
+
+        // ==========================================
+    // BLOCO 2 - SELEÇÕES 13 A 24
+    // ==========================================
+
+    { 
+        type: 'drag-drop', 
+        question: "13. O país que sediou a Copa de 2022 e veste a cor grená é o ______.", 
+        topic: "Ásia", 
+        hint: "É um país localizado no Oriente Médio.", 
+        hint_2: "A Copa de 2022 foi a primeira realizada no final do ano (novembro/dezembro).", 
+        hint_3: "Eles venceram as duas últimas edições da Copa da Ásia (2019 e 2023).",
+        hint_4: "É um país extremamente rico, famoso por suas reservas de gás natural.",
+        options: ["Japão", "Catar", "Irã"], 
+        answer: "Catar", 
+        rationale: "Correto! O Catar sediou o mundial de 2022 e defende o título asiático." 
+    },
+
+    { 
+        type: 'mcq', 
+        question: "14. De qual seleção participante estamos falando?", 
+        topic: "América do Sul", 
+        hint: "Seu uniforme é famoso pelas cores da bandeira: camisa amarela, calção azul e meias vermelhas.", 
+        hint_2: "Seus torcedores e jogadores são chamados de 'Los Cafeteros' (Os Cafeicultores).", 
+        hint_3: "Fizeram uma excelente campanha no Brasil em 2014, chegando às quartas de final.",
+        hint_4: "James Rodríguez e Luis Díaz são os grandes astros do time.",
+        options: [
+            { text: "Equador", isCorrect: false, rationale: "O Equador tem cores iguais, mas é apelidado de La Tri." }, 
+            { text: "Venezuela", isCorrect: false, rationale: "A Venezuela usa a cor Vinotinto." }, 
+            { text: "Colômbia", isCorrect: true, rationale: "Correto! A Colômbia é a famosa seleção dos Cafeteros." }, 
+            { text: "Peru", isCorrect: false, rationale: "O Peru usa camisa branca com faixa vermelha." }
+        ] 
+    },
+
+    { 
+        type: 'tf', 
+        question: "15. A Coreia do Sul chegou à semifinal da Copa do Mundo em 2002, edição que ajudou a sediar.", 
+        topic: "Ásia", 
+        hint: "Eles dividiram a sede do torneio de 2002 com o Japão.", 
+        hint_2: "A seleção é conhecida como 'Os Tigres da Ásia'.", 
+        hint_3: "O uniforme principal é tradicionalmente vermelho.",
+        hint_4: "Seu maior ídolo atual é Son Heung-min, atacante do Tottenham.",
+        options: [
+            { text: "Verdadeiro", isCorrect: true, rationale: "Correto! A Coreia do Sul fez uma campanha histórica até a semifinal em 2002." }, 
+            { text: "Falso", isCorrect: false, rationale: "Errado! Eles realmente chegaram à semifinal ao eliminar Itália e Espanha." }
+        ], 
+        answer: true 
+    },
+
+    { 
+        type: 'fill-in', 
+        question: "16. Qual seleção africana veste laranja e é conhecida como 'Os Elefantes'?", 
+        topic: "África", 
+        hint: "O país é o maior produtor mundial de cacau.", 
+        hint_2: "Foi a seleção do craque histórico Didier Drogba.", 
+        hint_3: "Leva o nome de um material muito valioso extraído das presas dos elefantes.",
+        hint_4: "O nome é composto por três palavras.",
+        answer: ["costa do marfim", "Costa do Marfim", "COSTA DO MARFIM"], 
+        rationale: "Correto! A Costa do Marfim é o país dos Elefantes laranjas." 
+    },
+
+    { 
+        type: 'mcq', 
+        question: "17. De qual seleção participante estamos falando?", 
+        topic: "Europa", 
+        hint: "O uniforme desta seleção é inconfundível: quadriculado em vermelho e branco.", 
+        hint_2: "Surgiu como nação independente na década de 1990, após a separação da Iugoslávia.", 
+        hint_3: "Eles eliminaram o Brasil nas quartas de final da Copa do Mundo de 2022.",
+        hint_4: "Foram vice-campeões do mundo em 2018, liderados pelo genial Luka Modrić.",
+        options: [
+            { text: "Sérvia", isCorrect: false, rationale: "A Sérvia veste vermelho liso e não chegou à final de 2018." }, 
+            { text: "França", isCorrect: false, rationale: "A França foi quem venceu a final de 2018 contra esta seleção." }, 
+            { text: "Bélgica", isCorrect: false, rationale: "A Bélgica veste vermelho, mas sem os quadrados." }, 
+            { text: "Croácia", isCorrect: true, rationale: "Correto! A Croácia é famosa pelo uniforme quadriculado e por Modrić." }
+        ] 
+    },
+
+    { 
+        type: 'tf', 
+        question: "18. A seleção de Curaçau é uma ilha no Caribe e fará sua estreia em Copas do Mundo em 2026.", 
+        topic: "América do Norte, Central e Caribe", 
+        hint: "É um território que faz parte do Reino dos Países Baixos (Holanda).", 
+        hint_2: "Fica numa região paradisíaca conhecida por suas águas cristalinas.", 
+        hint_3: "Seu uniforme é azul, assim como a cor do famoso licor que leva o nome da ilha.",
+        hint_4: "Eles garantiram uma vaga inédita no mundial.",
+        options: [
+            { text: "Verdadeiro", isCorrect: true, rationale: "Correto! Curaçau será uma das grandes novidades da Copa 2026." }, 
+            { text: "Falso", isCorrect: false, rationale: "Errado! A afirmação é verdadeira, eles farão sua primeira participação." }
+        ], 
+        answer: true 
+    },
+
+    { 
+        type: 'drag-drop', 
+        question: "19. A seleção conhecida como 'Os Faraós', comandada por Mohamed Salah, é o ______.", 
+        topic: "África", 
+        hint: "É a seleção com mais títulos da Copa Africana de Nações.", 
+        hint_2: "O país é famoso por um grande deserto e um rio histórico.", 
+        hint_3: "Seu território é cortado pelo famoso Rio Nilo.",
+        hint_4: "É o país onde ficam as Pirâmides de Gizé.",
+        options: ["Marrocos", "Egito", "Senegal"], 
+        answer: "Egito", 
+        rationale: "Correto! O Egito de Salah é a famosa seleção dos Faraós." 
+    },
+
+    { 
+        type: 'fill-in', 
+        question: "20. Qual país sul-americano manda seus jogos em uma capital com quase 3.000 metros de altitude e é chamado de 'La Tri'?", 
+        topic: "América do Sul", 
+        hint: "Sua camisa principal é amarela, o calção é azul e a meia é vermelha.", 
+        hint_2: "O nome do país é o mesmo da linha imaginária que divide o planeta ao meio.", 
+        hint_3: "Enner Valencia é o principal artilheiro desta seleção.",
+        hint_4: "A capital na altitude se chama Quito.",
+        answer: ["equador", "Equador", "EQUADOR"], 
+        rationale: "Correto! O Equador se beneficia da altitude de Quito e leva o nome da linha imaginária." 
+    },
+
+    { 
+        type: 'mcq', 
+        question: "21. De qual seleção participante estamos falando?", 
+        topic: "Europa", 
+        hint: "Têm uma rivalidade gigantesca e histórica com a Inglaterra.", 
+        hint_2: "A cor tradicional do seu uniforme é o azul marinho profundo.", 
+        hint_3: "Apesar de fazer parte do Reino Unido, possuem sua própria seleção de futebol.",
+        hint_4: "Seus torcedores são famosos por usarem 'Kilts' (saias masculinas) e tocarem gaita de fole.",
+        options: [
+            { text: "País de Gales", isCorrect: false, rationale: "Gales veste vermelho." }, 
+            { text: "Irlanda", isCorrect: false, rationale: "A Irlanda veste verde e não faz parte do Reino Unido (exceto o Norte)." }, 
+            { text: "Escócia", isCorrect: true, rationale: "Correto! A Escócia veste azul marinho e tem as gaitas de fole como símbolo." }, 
+            { text: "Holanda", isCorrect: false, rationale: "A Holanda não fica no Reino Unido e veste laranja." }
+        ] 
+    },
+
+    { 
+        type: 'tf', 
+        question: "22. A Espanha venceu sua única Copa do Mundo em 2010, dominando os adversários com o estilo de jogo 'Tiki-Taka'.", 
+        topic: "Europa", 
+        hint: "A seleção é apelidada de 'La Roja' por causa do uniforme vermelho.", 
+        hint_2: "A geração de 2010 contava com gênios como Iniesta e Xavi.", 
+        hint_3: "Eles também são tricampeões da Eurocopa.",
+        hint_4: "O gol do título mundial de 2010 foi marcado na prorrogação.",
+        options: [
+            { text: "Verdadeiro", isCorrect: true, rationale: "Correto! A Espanha encantou o mundo em 2010 com o toque de bola do Tiki-Taka." }, 
+            { text: "Falso", isCorrect: false, rationale: "Errado! A afirmação é perfeitamente verdadeira." }
+        ], 
+        answer: true 
+    },
+
+    { 
+        type: 'drag-drop', 
+        question: "23. Um dos países-sede de 2026, cuja liga se chama MLS, são os ______.", 
+        topic: "América do Norte (País-Sede)", 
+        hint: "Sua bandeira possui listras vermelhas e brancas.", 
+        hint_2: "A bandeira possui também 50 estrelas.", 
+        hint_3: "O 'futebol' tradicional para eles é jogado com as mãos e uma bola oval.",
+        hint_4: "É a sede principal e o país mais populoso entre os três organizadores de 2026.",
+        options: ["Canadá", "Estados Unidos", "México"], 
+        answer: "Estados Unidos", 
+        rationale: "Correto! Os Estados Unidos abrigam a liga MLS e sediarão boa parte dos jogos de 2026." 
+    },
+
+    { 
+        type: 'fill-in', 
+        question: "24. Qual seleção europeia tem um Galo como mascote e possui Kylian Mbappé como grande astro?", 
+        topic: "Europa", 
+        hint: "Foi a grande campeã da Copa do Mundo de 2018.", 
+        hint_2: "Perdeu a final de 2022 para a Argentina nos pênaltis.", 
+        hint_3: "A seleção é apelidada de 'Les Bleus' (Os Azuis).",
+        hint_4: "Sua capital abriga a famosa Torre Eiffel.",
+        answer: ["frança", "França", "FRANÇA"], 
+        rationale: "Correto! A França de Mbappé é a famosa seleção do Galo e veste azul." 
+    },
+
+ // ==========================================
+    // BLOCO 3 - SELEÇÕES 25 A 36
+    // ==========================================
+
+    { 
+        type: 'mcq', 
+        question: "25. De qual seleção participante estamos falando?", 
+        topic: "África", 
+        hint: "É uma das seleções mais tradicionais do continente africano.", 
+        hint_2: "Quase se tornou a primeira seleção africana a chegar numa semifinal em 2010 (parou no Uruguai).", 
+        hint_3: "Seu uniforme principal é totalmente branco, com uma estrela preta no peito.",
+        hint_4: "Eles são conhecidos como 'As Estrelas Negras' (Black Stars).",
+        options: [
+            { text: "Camarões", isCorrect: false, rationale: "Camarões veste verde e é chamado de Leões Indomáveis." }, 
+            { text: "Gana", isCorrect: true, rationale: "Correto! Gana, as Estrelas Negras, fez uma campanha inesquecível em 2010." }, 
+            { text: "Nigéria", isCorrect: false, rationale: "A Nigéria usa verde e branco." }, 
+            { text: "Senegal", isCorrect: false, rationale: "Senegal são os Leões de Teranga." }
+        ] 
+    },
+
+    { 
+        type: 'drag-drop', 
+        question: "26. O país caribenho que retorna a uma Copa do Mundo após disputar apenas em 1974 é o ______.", 
+        topic: "América do Norte, Central e Caribe", 
+        hint: "É uma nação localizada em uma ilha no Mar do Caribe.", 
+        hint_2: "Eles dividem a mesma ilha com a República Dominicana.", 
+        hint_3: "Seus idiomas oficiais são o francês e o crioulo.",
+        hint_4: "Sua bandeira é dividida horizontalmente em azul e vermelho.",
+        options: ["Haiti", "Jamaica", "Cuba"], 
+        answer: "Haiti", 
+        rationale: "Correto! O Haiti fez história ao retornar para a Copa do Mundo." 
+    },
+
+    { 
+        type: 'tf', 
+        question: "27. A Holanda, apesar de encantar o mundo, nunca conseguiu vencer uma final de Copa do Mundo.", 
+        topic: "Europa", 
+        hint: "O uniforme principal desta seleção é a inconfundível camisa laranja.", 
+        hint_2: "Nos anos 70, eles revolucionaram o futebol e foram chamados de 'Laranja Mecânica'.", 
+        hint_3: "Chegaram a três finais de Copa do Mundo (1974, 1978 e 2010).",
+        hint_4: "Infelizmente, perderam as três finais que disputaram.",
+        options: [
+            { text: "Verdadeiro", isCorrect: true, rationale: "Correto! A Holanda é famosa por ser a grande seleção que nunca conquistou a taça." }, 
+            { text: "Falso", isCorrect: false, rationale: "Errado! Eles realmente perderam as três finais que jogaram." }
+        ], 
+        answer: true 
+    },
+
+    { 
+        type: 'fill-in', 
+        question: "28. Qual seleção europeia é conhecida por ter 'inventado' as regras modernas do futebol?", 
+        topic: "Europa", 
+        hint: "Eles venceram a Copa do Mundo apenas uma vez, em 1966, jogando em casa.", 
+        hint_2: "O escudo da sua federação possui o desenho de Três Leões.", 
+        hint_3: "A sua liga nacional é a famosíssima Premier League.",
+        hint_4: "A capital do país é Londres.",
+        answer: ["inglaterra", "Inglaterra", "INGLATERRA"], 
+        rationale: "Correto! A Inglaterra inventou as regras e faturou a Copa de 1966." 
+    },
+
+    { 
+        type: 'mcq', 
+        question: "29. De qual seleção participante estamos falando?", 
+        topic: "Ásia", 
+        hint: "É uma das grandes potências constantes do continente asiático.", 
+        hint_2: "O país fica no Oriente Médio e é famoso pela herança da antiga Pérsia.", 
+        hint_3: "Sua seleção é conhecida localmente como 'Team Melli'.",
+        hint_4: "O uniforme principal é branco com detalhes em vermelho e verde.",
+        options: [
+            { text: "Irã", isCorrect: true, rationale: "Correto! O Irã (antiga Pérsia) é presença quase garantida representando a Ásia." }, 
+            { text: "Iraque", isCorrect: false, rationale: "O Iraque usa tradicionalmente a cor verde." }, 
+            { text: "Arábia Saudita", isCorrect: false, rationale: "A Arábia Saudita usa apenas verde e branco." }, 
+            { text: "Emirados Árabes", isCorrect: false, rationale: "Não são os persas e a seleção não se chama Team Melli." }
+        ] 
+    },
+
+    { 
+        type: 'tf', 
+        question: "30. O Iraque disputará em 2026 a sua primeira Copa do Mundo na história.", 
+        topic: "Ásia", 
+        hint: "Eles são conhecidos como 'Os Leões da Mesopotâmia'.", 
+        hint_2: "Venceram a Copa da Ásia de forma heroica em 2007.", 
+        hint_3: "A capital do país é Bagdá.",
+        hint_4: "Eles já disputaram a Copa do Mundo uma vez no passado, na edição do México em 1986.",
+        options: [
+            { text: "Verdadeiro", isCorrect: false, rationale: "Errado! Eles já participaram antes, na Copa de 1986." }, 
+            { text: "Falso", isCorrect: true, rationale: "Correto! A afirmação é falsa porque o Iraque jogou o mundial de 1986." }
+        ], 
+        answer: false 
+    },
+
+    { 
+        type: 'drag-drop', 
+        question: "31. A seleção asiática que usa azul e cuja torcida é famosa por limpar os estádios é o ______.", 
+        topic: "Ásia", 
+        hint: "É o país famoso como 'A Terra do Sol Nascente'.", 
+        hint_2: "A seleção é apelidada de 'Os Samurais Azuis'.", 
+        hint_3: "Eles co-sediaram a Copa do Mundo de 2002 com a Coreia do Sul.",
+        hint_4: "É o país famoso por mangás, animes e tecnologia.",
+        options: ["Japão", "Coreia do Sul", "China"], 
+        answer: "Japão", 
+        rationale: "Correto! O Japão é admirado mundialmente pelos Samurais Azuis e sua educação nas arquibancadas." 
+    },
+
+    { 
+        type: 'fill-in', 
+        question: "32. Qual seleção asiática, famosa pelo sítio arqueológico de Petra, fará sua estreia em Copas em 2026?", 
+        topic: "Ásia", 
+        hint: "É um país localizado no Oriente Médio.", 
+        hint_2: "Fizeram história ao chegar na final da Copa da Ásia no início de 2024.", 
+        hint_3: "Fazem fronteira com Israel, Síria, Iraque e Arábia Saudita.",
+        hint_4: "O nome do país começa com 'J'.",
+        answer: ["jordânia", "Jordânia", "JORDÂNIA"], 
+        rationale: "Correto! A Jordânia chega para sua primeira Copa após ótimo ciclo asiático." 
+    },
+
+    { 
+        type: 'mcq', 
+        question: "33. De qual seleção participante estamos falando?", 
+        topic: "África", 
+        hint: "Fizeram história na última Copa do Mundo no Catar.", 
+        hint_2: "Tornaram-se a primeira nação africana da história a chegar a uma semifinal de Copa.", 
+        hint_3: "Eles eliminaram a Espanha e Portugal em 2022.",
+        hint_4: "Suas cores são vermelho e verde, sendo apelidados de 'Leões do Atlas'.",
+        options: [
+            { text: "Senegal", isCorrect: false, rationale: "Senegal parou nas oitavas de final em 2022." }, 
+            { text: "Camarões", isCorrect: false, rationale: "Camarões não chegou à semifinal de 2022." }, 
+            { text: "Tunísia", isCorrect: false, rationale: "A Tunísia não passou da fase de grupos no Catar." }, 
+            { text: "Marrocos", isCorrect: true, rationale: "Correto! Marrocos impressionou o mundo no Catar em 2022." }
+        ] 
+    },
+
+    { 
+        type: 'drag-drop', 
+        question: "34. A seleção apelidada de 'El Tri', que sediará a Copa pela 3ª vez, é o ______.", 
+        topic: "América do Norte (País-Sede)", 
+        hint: "É um dos três países anfitriões de 2026.", 
+        hint_2: "Será o único país a sediar a Copa três vezes (1970, 1986 e 2026).", 
+        hint_3: "Seu uniforme é predominantemente verde.",
+        hint_4: "O lendário Estádio Azteca fica em sua capital.",
+        options: ["México", "Estados Unidos", "Canadá"], 
+        answer: "México", 
+        rationale: "Correto! O México do tradicional 'El Tri' será sede pela terceira vez." 
+    },
+
+    { 
+        type: 'tf', 
+        question: "35. A Noruega volta a disputar uma Copa do Mundo após anos, liderada pelo craque Erling Haaland.", 
+        topic: "Europa", 
+        hint: "O país escandinavo estava fora do mundial desde 1998.", 
+        hint_2: "Eles são famosos pela herança dos povos Vikings.", 
+        hint_3: "A seleção conta hoje com estrelas como Martin Ødegaard e Erling Haaland.",
+        hint_4: "O uniforme da equipe usa o vermelho e o azul escuro.",
+        options: [
+            { text: "Verdadeiro", isCorrect: true, rationale: "Correto! Haaland e Ødegaard trouxeram os Vikings de volta ao mundial." }, 
+            { text: "Falso", isCorrect: false, rationale: "Errado! A Noruega finalmente conseguiu voltar com sua nova geração." }
+        ], 
+        answer: true 
+    },
+
+    { 
+        type: 'fill-in', 
+        question: "36. Qual país da Oceania, famoso pelas ovelhas e pássaros kiwis, se classificou para 2026?", 
+        topic: "Ásia (Geograficamente Oceania)", 
+        hint: "O futebol perde em popularidade para o rúgbi neste país.", 
+        hint_2: "Sua seleção de rúgbi, os 'All Blacks', é mundialmente temida.", 
+        hint_3: "Por contraste, a seleção de futebol veste branco e é chamada de 'All Whites'.",
+        hint_4: "O país tem o nome composto por duas palavras e é vizinho da Austrália.",
+        answer: ["nova zelândia", "Nova Zelândia", "NOVA ZELÂNDIA"], 
+        rationale: "Correto! A Nova Zelândia e seus 'All Whites' representam a Oceania de forma constante." 
+    },
+
+// ==========================================
+    // BLOCO 4 - SELEÇÕES 37 A 48
+    // ==========================================
+
+    { 
+        type: 'mcq', 
+        question: "37. De qual seleção participante estamos falando?", 
+        topic: "América do Norte, Central e Caribe", 
+        hint: "O país é mundialmente famoso por um grande canal que liga os oceanos Atlântico e Pacífico.", 
+        hint_2: "A capital tem exatamente o mesmo nome do país.", 
+        hint_3: "Esta será apenas a sua segunda participação na história (a primeira foi na Rússia em 2018).",
+        hint_4: "O uniforme principal da equipe é vermelho.",
+        options: [
+            { text: "Costa Rica", isCorrect: false, rationale: "A Costa Rica veste vermelho, mas não tem o famoso Canal que liga os oceanos." }, 
+            { text: "El Salvador", isCorrect: false, rationale: "El Salvador joga de azul e branco." }, 
+            { text: "Honduras", isCorrect: false, rationale: "Honduras veste azul e branco e o país não leva o nome da capital." }, 
+            { text: "Panamá", isCorrect: true, rationale: "Correto! O Panamá é o país do canal e volta ao mundial em 2026." }
+        ] 
+    },
+
+    { 
+        type: 'drag-drop', 
+        question: "38. A seleção sul-americana que usa camisa listrada de vermelho e branco é o ______.", 
+        topic: "América do Sul", 
+        hint: "É um país que faz fronteira seca com o Brasil e a Argentina.", 
+        hint_2: "Sua capital é a cidade de Assunção.", 
+        hint_3: "Foi a seleção do famoso e folclórico goleiro-artilheiro Chilavert.",
+        hint_4: "Eles são conhecidos como 'La Albirroja' (A Alvirrubra).",
+        options: ["Peru", "Chile", "Paraguai"], 
+        answer: "Paraguai", 
+        rationale: "Correto! O Paraguai possui o uniforme listrado alvirrubro e faz fronteira com o Brasil." 
+    },
+
+    { 
+        type: 'tf', 
+        question: "39. Liderada por Cristiano Ronaldo, a seleção de Portugal finalmente conquistou sua primeira Copa do Mundo em 2022.", 
+        topic: "Europa", 
+        hint: "É o país de origem da língua oficial falada no Brasil.", 
+        hint_2: "O uniforme tradicional do time é cor de vinho (grená) e verde.", 
+        hint_3: "Eles foram os grandes campeões da Eurocopa em 2016.",
+        hint_4: "No entanto, eles foram eliminados por Marrocos nas quartas de final em 2022.",
+        options: [
+            { text: "Verdadeiro", isCorrect: false, rationale: "Errado! A Argentina venceu em 2022. Portugal ainda busca sua primeira Copa." }, 
+            { text: "Falso", isCorrect: true, rationale: "Correto! Apesar dos títulos europeus, Portugal nunca venceu a Copa do Mundo." }
+        ], 
+        answer: false 
+    },
+
+    { 
+        type: 'fill-in', 
+        question: "40. Qual país africano retorna à Copa, sendo que em sua única participação (1974) era chamado de Zaire?", 
+        topic: "África", 
+        hint: "É o segundo maior país da África em extensão territorial.", 
+        hint_2: "Sua seleção é conhecida como 'Os Leopardos'.", 
+        hint_3: "A capital do país é Kinshasa.",
+        hint_4: "O nome atual do país contém as palavras 'República Democrática'.",
+        answer: ["rd congo", "RD Congo", "república democrática do congo", "República Democrática do Congo"], 
+        rationale: "Correto! A República Democrática do Congo fez história como Zaire nos anos 70 e volta agora." 
+    },
+
+    { 
+        type: 'mcq', 
+        question: "41. De qual seleção participante estamos falando?", 
+        topic: "Europa", 
+        hint: "É um país localizado bem no centro da Europa.", 
+        hint_2: "Sua capital é a belíssima e histórica cidade de Praga.", 
+        hint_3: "No passado, formava uma única e forte nação de futebol junto com a Eslováquia.",
+        hint_4: "A seleção foi vice-campeã da Eurocopa em 1996 e tem Petr Čech como grande ídolo histórico.",
+        options: [
+            { text: "Polônia", isCorrect: false, rationale: "A capital da Polônia é Varsóvia e eles não se separaram da Eslováquia." }, 
+            { text: "Hungria", isCorrect: false, rationale: "A Hungria tem Budapeste como capital." }, 
+            { text: "República Tcheca", isCorrect: true, rationale: "Correto! A Tchecoslováquia se dividiu e a República Tcheca herdou a tradição." }, 
+            { text: "Áustria", isCorrect: false, rationale: "A capital da Áustria é Viena." }
+        ] 
+    },
+
+    { 
+        type: 'drag-drop', 
+        question: "42. A seleção africana que tem Sadio Mané como ídolo e é chamada de 'Leões de Teranga' é o ______.", 
+        topic: "África", 
+        hint: "A capital do país é a cidade de Dacar.", 
+        hint_2: "Eles chocaram o mundo ao vencer a atual campeã França na partida de abertura da Copa de 2002.", 
+        hint_3: "Seu uniforme principal costuma ser todo branco com detalhes em verde, amarelo e vermelho.",
+        hint_4: "O craque Sadio Mané é o responsável por mudar a história do futebol no país.",
+        options: ["Senegal", "Camarões", "Nigéria"], 
+        answer: "Senegal", 
+        rationale: "Correto! O Senegal dos Leões de Teranga e de Sadio Mané." 
+    },
+
+    { 
+        type: 'tf', 
+        question: "43. A Suécia é um país nórdico de clima muito frio que veste as cores amarelo e azul.", 
+        topic: "Europa", 
+        hint: "Eles são mundialmente conhecidos por seu design e por empresas como a IKEA.", 
+        hint_2: "Sua capital é Estocolmo.", 
+        hint_3: "Foram os anfitriões e vice-campeões do mundo em 1958, perdendo a final para o Brasil de Pelé.",
+        hint_4: "O craque Zlatan Ibrahimović é a maior lenda do país.",
+        options: [
+            { text: "Verdadeiro", isCorrect: true, rationale: "Correto! A Suécia tem muita tradição e as cores amarelo e azul são sua marca." }, 
+            { text: "Falso", isCorrect: false, rationale: "Errado! A afirmação é perfeitamente verdadeira." }
+        ], 
+        answer: true 
+    },
+
+    { 
+        type: 'fill-in', 
+        question: "44. Qual seleção tem uma cruz branca em seu escudo e representa a terra dos Alpes e dos relógios?", 
+        topic: "Europa", 
+        hint: "Sua bandeira nacional tem um formato incomum: é perfeitamente quadrada, vermelha com uma cruz branca.", 
+        hint_2: "Eles falam vários idiomas no país: alemão, francês e italiano.", 
+        hint_3: "A seleção tem um histórico de formar times muito defensivos e difíceis de serem batidos.",
+        hint_4: "O nome do país começa com 'S' e possui 5 letras.",
+        answer: ["suíça", "Suíça", "SUÍÇA"], 
+        rationale: "Correto! A Suíça, famosa pelos relógios, chocolates e um ferrolho na defesa." 
+    },
+
+    { 
+        type: 'mcq', 
+        question: "45. De qual seleção participante estamos falando?", 
+        topic: "África", 
+        hint: "É um país localizado no extremo norte do continente africano, banhado pelo Mar Mediterrâneo.", 
+        hint_2: "Na antiguidade, seu território abrigava o grande império de Cartago.", 
+        hint_3: "Os jogadores da seleção são apelidados de 'As Águias de Cartago'.",
+        hint_4: "O uniforme principal é branco e vermelho, assim como a bandeira que tem uma lua crescente e uma estrela.",
+        options: [
+            { text: "Argélia", isCorrect: false, rationale: "A Argélia é o país das Raposas do Deserto e usa verde." }, 
+            { text: "Marrocos", isCorrect: false, rationale: "Marrocos são os Leões do Atlas e a estrela da bandeira é verde." }, 
+            { text: "Egito", isCorrect: false, rationale: "O Egito é o país dos Faraós." }, 
+            { text: "Tunísia", isCorrect: true, rationale: "Correto! A Tunísia carrega o histórico título de Águias de Cartago." }
+        ] 
+    },
+
+    { 
+        type: 'drag-drop', 
+        question: "46. O país localizado entre a Europa e a Ásia, que chegou ao 3º lugar na Copa de 2002, é a ______.", 
+        topic: "Europa", 
+        hint: "Sua cidade mais rica e famosa é Istambul, cortada pelo Estreito de Bósforo.", 
+        hint_2: "Os torcedores do país são famosos por transformar os estádios num verdadeiro 'inferno' para os visitantes.", 
+        hint_3: "A bandeira é vermelha com uma lua crescente e uma estrela brancas.",
+        hint_4: "A seleção encantou o mundo em 2002, perdendo apenas para o Brasil (duas vezes).",
+        options: ["Grécia", "Bulgária", "Turquia"], 
+        answer: "Turquia", 
+        rationale: "Correto! A Turquia divide dois continentes e fez uma Copa histórica em 2002." 
+    },
+
+    { 
+        type: 'tf', 
+        question: "47. A seleção do Uruguai é bicampeã do mundo, tendo vencido a primeira Copa da história e protagonizado o 'Maracanazo'.", 
+        topic: "América do Sul", 
+        hint: "É um país localizado no extremo sul do Brasil, fazendo fronteira com o Rio Grande do Sul.", 
+        hint_2: "Eles sediaram e venceram a primeira Copa de 1930.", 
+        hint_3: "Venceram o Brasil na final de 1950, calando o Maracanã lotado.",
+        hint_4: "Eles jogam com uma inconfundível camisa azul clara, sendo chamados de 'A Celeste'.",
+        options: [
+            { text: "Verdadeiro", isCorrect: true, rationale: "Correto! O Uruguai é a lendária Celeste Olímpica, bicampeã mundial." }, 
+            { text: "Falso", isCorrect: false, rationale: "Errado! A afirmação é verdadeira. O Uruguai tem enorme tradição em Copas." }
+        ], 
+        answer: true 
+    },
+
+    { 
+        type: 'fill-in', 
+        question: "48. Qual país da Ásia Central fará sua estreia absoluta na Copa do Mundo em 2026?", 
+        topic: "Ásia", 
+        hint: "O território fazia parte da antiga União Soviética antes dos anos 90.", 
+        hint_2: "A capital do país se chama Tashkent.", 
+        hint_3: "O uniforme do país costuma ter detalhes em branco, azul e verde.",
+        hint_4: "O nome do país termina com o sufixo '-istão'.",
+        answer: ["uzbequistão", "Uzbequistão", "UZBEQUISTÃO"], 
+        rationale: "Correto! O Uzbequistão conseguiu uma grande evolução e será uma das seleções estreantes!" 
+    }
+    ],
+
+            init() {
+                this.elements = {
+                    studentCodeInput: document.getElementById('student-code'),
+                    introCard: document.getElementById('intro-card'),
+                    quizCard: document.getElementById('quiz-card'),
+                    resultsCard: document.getElementById('results-card'),
+                    topicSummary: document.getElementById('topic-summary'),
+                    questionText: document.getElementById('question-text'),
+                    optionsList: document.getElementById('options-list'),
+                    interactiveContainer: document.getElementById('interactive-container'),
+                    nextButton: document.getElementById('next-button'),
+                    skipButton: document.getElementById('skip-button'),
+                    hintButton: document.getElementById('hint-button'),
+                    hintText: document.getElementById('hint-text'),
+                    justificationText: document.getElementById('justification-text'),
+                    currentQuestionNumSpan: document.getElementById('current-question-num'),
+                    totalQuestionsSpan: document.getElementById('total-questions'),
+                    scoreDisplay: document.getElementById('score-display'),
+                    totalScoreDisplay: document.getElementById('total-score'),
+                    percentageDisplay: document.getElementById('percentage-display'),
+                    reportStudentName: document.getElementById('report-student-name'),
+                    reportStudentCode: document.getElementById('report-student-code'),
+                    incorrectQuestionsContainer: document.getElementById('incorrect-questions-container'),
+                    progressCorrect: document.getElementById('progress-correct'),
+                    progressIncorrect: document.getElementById('progress-incorrect')
+                };
+                this.elements.totalQuestionsSpan.textContent = this.questions.length;
+                this.elements.totalScoreDisplay.textContent = this.questions.length;
+            },
+
+            jumpToReport() {
+                const code = this.elements.studentCodeInput.value.trim().toUpperCase();
+                if (this.studentData[code]) {
+                    const savedData = localStorage.getItem('masterclass_report_' + code);
+                    if (savedData) {
+                        const data = JSON.parse(savedData);
+                        this.validatedStudentCode = code;
+                        this.validatedStudentName = this.studentData[code];
+                        this.score = data.score;
+                        this.incorrectAnswers = data.incorrectAnswers;
+                        this.elements.introCard.style.display = 'none';
+                        this.showResults();
+                    } else {
+                        alert('Nenhum relatório final salvo encontrado para este código. Por favor, inicie o quiz.');
+                    }
+                } else {
+                    alert('Código de acesso inválido! Tente novamente.');
+                }
+            },
+
+            updateProgress() {
+                const total = this.questions.length;
+                const correctPerc = (this.score / total) * 100;
+                const incorrectPerc = (this.incorrectAnswers.length / total) * 100;
+                this.elements.progressCorrect.style.width = `${correctPerc}%`;
+                this.elements.progressIncorrect.style.width = `${incorrectPerc}%`;
+            },
+
+            saveProgress() {
+                localStorage.setItem('masterclass_progress_' + this.validatedStudentCode, JSON.stringify({
+                    currentIndex: this.currentQuestionIndex,
+                    score: this.score,
+                    incorrectAnswers: this.incorrectAnswers
+                }));
+            },
+
+            clearProgress() {
+                localStorage.removeItem('masterclass_progress_' + this.validatedStudentCode);
+            },
+
+            startQuiz() {
+                const code = this.elements.studentCodeInput.value.trim().toUpperCase();
+                if (this.studentData[code]) {
+                    this.validatedStudentCode = code;
+                    this.validatedStudentName = this.studentData[code];
+                    this.elements.introCard.style.display = 'none';
+                    this.elements.quizCard.style.display = 'flex';
+
+                    const savedProgress = localStorage.getItem('masterclass_progress_' + code);
+                    if (savedProgress) {
+                        const data = JSON.parse(savedProgress);
+                        this.currentQuestionIndex = data.currentIndex;
+                        this.score = data.score;
+                        this.incorrectAnswers = data.incorrectAnswers;
+                        
+                        if(this.currentQuestionIndex >= this.questions.length) {
+                            this.currentQuestionIndex = 0;
+                            this.score = 0;
+                            this.incorrectAnswers = [];
+                        }
+                    } else {
+                        this.currentQuestionIndex = 0;
+                        this.score = 0;
+                        this.incorrectAnswers = [];
+                    }
+
+                    this.loadQuestion();
+                    this.updateProgress();
+                } else {
+                    alert('Código de acesso inválido! Tente novamente.');
+                }
+            },
+
+            loadQuestion() {
+                this.hintClicks = 0;
+		this.elements.hintButton.style.display = 'inline-block'; // Garante que o botão reapareça na nova questão
+                this.elements.hintText.style.display = 'none';
+                this.elements.justificationText.style.display = 'none';
+                this.elements.nextButton.style.display = 'none';
+                this.elements.skipButton.style.display = 'inline-block';
+                this.elements.optionsList.innerHTML = '';
+                this.elements.interactiveContainer.innerHTML = '';
+                this.elements.interactiveContainer.style.display = 'none';
+
+                const currentQ = this.questions[this.currentQuestionIndex];
+                this.elements.currentQuestionNumSpan.textContent = this.currentQuestionIndex + 1;
+                
+                // Show Topic Summary
+                if(TOPIC_SUMMARIES[currentQ.topic]) {
+                    this.elements.topicSummary.style.display = 'block';
+                    this.elements.topicSummary.innerHTML = `<strong>Tópico: ${currentQ.topic}</strong><br>${TOPIC_SUMMARIES[currentQ.topic]}`;
+                } else {
+                    this.elements.topicSummary.style.display = 'none';
+                }
+
+                this.elements.questionText.textContent = currentQ.question;
+                
+                // Reset Hint text logic
+                this.elements.hintText.innerHTML = ""; 
+
+                // Process Question Types
+                if (currentQ.type === 'mcq' || currentQ.type === 'tf') {
+                    currentQ.options.forEach((opt) => {
+                        const li = document.createElement('li');
+                        li.className = 'option-item';
+                        li.textContent = opt.text;
+                        li.onclick = () => this.handleSelection(opt.isCorrect, opt.text, currentQ.question, opt.rationale, li);
+                        this.elements.optionsList.appendChild(li);
+                    });
+                } else if (currentQ.type === 'drag-drop') {
+                    this.elements.interactiveContainer.style.display = 'flex';
+                    
+                    const dropZone = document.createElement('div');
+                    dropZone.className = 'drop-zone';
+                    dropZone.id = 'drop-zone';
+                    dropZone.textContent = "Arraste ou Clique para responder";
+                    
+                    const optionsContainer = document.createElement('div');
+                    optionsContainer.className = 'drag-options';
+
+                    // Logic for drop zone
+                    dropZone.addEventListener('dragover', (e) => {
+                        e.preventDefault();
+                        dropZone.classList.add('dragover');
+                    });
+                    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+                    dropZone.addEventListener('drop', (e) => {
+                        e.preventDefault();
+                        dropZone.classList.remove('dragover');
+                        const data = e.dataTransfer.getData('text/plain');
+                        this.processDragDropAnswer(data, dropZone, currentQ);
+                    });
+
+                    currentQ.options.forEach(optText => {
+                        const dragItem = document.createElement('div');
+                        dragItem.className = 'drag-item';
+                        dragItem.textContent = optText;
+                        dragItem.draggable = true;
+                        
+                        dragItem.addEventListener('dragstart', (e) => {
+                            e.dataTransfer.setData('text/plain', optText);
+                        });
+
+                        // Clicar para preencher
+                        dragItem.addEventListener('click', () => {
+                            this.processDragDropAnswer(optText, dropZone, currentQ);
+                        });
+
+                        optionsContainer.appendChild(dragItem);
+                    });
+
+                    this.elements.interactiveContainer.appendChild(dropZone);
+                    this.elements.interactiveContainer.appendChild(optionsContainer);
+
+                } else if (currentQ.type === 'fill-in') {
+                    this.elements.interactiveContainer.style.display = 'flex';
+                    
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.className = 'fill-in-input';
+                    input.placeholder = 'Digite a palavra...';
+                    
+                    const btn = document.createElement('button');
+                    btn.className = 'submit-btn';
+                    btn.textContent = 'Confirmar';
+                    btn.onclick = () => {
+                        const val = input.value.trim().toLowerCase();
+                        if(val === "") return;
+                        input.disabled = true;
+                        btn.style.display = 'none';
+                        const isCorrect = currentQ.answer.includes(val);
+                        this.handleSelection(isCorrect, val, currentQ.question, currentQ.rationale, null);
+                    };
+
+                    this.elements.interactiveContainer.appendChild(input);
+                    this.elements.interactiveContainer.appendChild(btn);
+                }
+            },
+
+            processDragDropAnswer(userText, dropZone, currentQ) {
+                if(dropZone.getAttribute('data-answered') === 'true') return;
+                dropZone.setAttribute('data-answered', 'true');
+                dropZone.textContent = userText;
+                
+                const isCorrect = (userText === currentQ.answer);
+                if(isCorrect) {
+                    dropZone.style.backgroundColor = 'lightgreen';
+                    dropZone.style.color = '#000';
+                } else {
+                    dropZone.style.backgroundColor = 'salmon';
+                    dropZone.style.color = '#fff';
+                }
+
+                // Desabilitar itens para não clicar de novo
+                const items = this.elements.interactiveContainer.querySelectorAll('.drag-item');
+                items.forEach(i => { i.style.pointerEvents = 'none'; i.style.opacity = '0.6'; });
+
+                this.handleSelection(isCorrect, userText, currentQ.question, currentQ.rationale, null);
+            },
+
+            handleSelection(isCorrect, userText, questionText, rationale, htmlElement) {
+                const currentQ = this.questions[this.currentQuestionIndex];
+                
+                // Block other options in MCQ/TF
+                if(htmlElement) {
+                    const allOptions = this.elements.optionsList.querySelectorAll('.option-item');
+                    allOptions.forEach(opt => opt.style.pointerEvents = 'none');
+                }
+
+                this.elements.skipButton.style.display = 'none';
+                this.elements.nextButton.style.display = 'inline-block';
+                
+                this.elements.justificationText.style.display = 'block';
+                this.elements.justificationText.innerHTML = `<strong>Justificativa:</strong> ${rationale}`;
+
+                if (isCorrect) {
+                    if(htmlElement) htmlElement.classList.add('correct');
+                    this.score++;
+                } else {
+                    if(htmlElement) {
+                        htmlElement.classList.add('incorrect');
+                        // Show correct option
+                        const allOptions = this.elements.optionsList.querySelectorAll('.option-item');
+                        allOptions.forEach(opt => {
+                            if(currentQ.options && currentQ.options.find(o => o.text === opt.textContent && o.isCorrect)) {
+                                opt.classList.add('correct');
+                            }
+                        });
+                    }
+
+                    // Determinar a resposta correta para o relatório
+                    let correctAnswerText = "Ver Justificativa";
+                    if(currentQ.type === 'mcq' || currentQ.type === 'tf') {
+                        const correctOpt = currentQ.options.find(o => o.isCorrect);
+                        if(correctOpt) correctAnswerText = correctOpt.text;
+                    } else if (currentQ.type === 'drag-drop') {
+                        correctAnswerText = currentQ.answer;
+                    } else if (currentQ.type === 'fill-in') {
+                        correctAnswerText = currentQ.answer.join(" ou ");
+                    }
+
+                    this.incorrectAnswers.push({
+                        q: questionText,
+                        userAnswer: userText,
+                        correctAnswer: correctAnswerText,
+                        justification: rationale
+                    });
+                }
+                
+                this.updateProgress();
+            },
+
+showHint() {
+    const currentQ = this.questions[this.currentQuestionIndex];
+    this.elements.hintText.style.display = 'block';
+    
+    if(this.hintClicks === 0) {
+        this.elements.hintText.innerHTML = `<strong>Dica 1:</strong> ${currentQ.hint}`;
+        this.hintClicks++;
+    } else if(this.hintClicks === 1 && currentQ.hint_2) {
+        this.elements.hintText.innerHTML += `<br><br><strong>Dica 2:</strong> ${currentQ.hint_2}`;
+        this.hintClicks++;
+    } else if(this.hintClicks === 2 && currentQ.hint_3) {
+        this.elements.hintText.innerHTML += `<br><br><strong>Dica 3:</strong> ${currentQ.hint_3}`;
+        this.hintClicks++;
+    } else if(this.hintClicks === 3 && currentQ.hint_4) {
+        this.elements.hintText.innerHTML += `<br><br><strong>Dica 4:</strong> ${currentQ.hint_4}`;
+        this.hintClicks++;
+        // Esconde o botão após a última dica
+        this.elements.hintButton.style.display = 'none'; 
+    }
+},
+
+            skipQuestion() {
+                const currentQ = this.questions[this.currentQuestionIndex];
+                
+                let correctAnswerText = "Ver Justificativa";
+                let rationaleText = currentQ.rationale || "";
+
+                if(currentQ.type === 'mcq' || currentQ.type === 'tf') {
+                    const correctOpt = currentQ.options.find(o => o.isCorrect);
+                    if(correctOpt) {
+                        correctAnswerText = correctOpt.text;
+                        rationaleText = correctOpt.rationale;
+                    }
+                } else if (currentQ.type === 'drag-drop') {
+                    correctAnswerText = currentQ.answer;
+                } else if (currentQ.type === 'fill-in') {
+                    correctAnswerText = currentQ.answer.join(" ou ");
+                }
+
+                this.incorrectAnswers.push({
+                    q: currentQ.question,
+                    userAnswer: "Pulou a questão",
+                    correctAnswer: correctAnswerText,
+                    justification: rationaleText
+                });
+                
+                this.updateProgress();
+                this.nextQuestion();
+            },
+
+            nextQuestion() {
+                this.currentQuestionIndex++;
+                if (this.currentQuestionIndex < this.questions.length) {
+                    this.saveProgress();
+                    this.loadQuestion();
+                } else {
+                    this.clearProgress();
+                    this.showResults();
+                }
+            },
+
+            showResults() {
+                localStorage.setItem('masterclass_report_' + this.validatedStudentCode, JSON.stringify({
+                    score: this.score,
+                    incorrectAnswers: this.incorrectAnswers
+                }));
+
+                this.elements.quizCard.style.display = 'none';
+                this.elements.resultsCard.style.display = 'block';
+                
+                this.elements.reportStudentName.textContent = this.validatedStudentName;
+                this.elements.reportStudentCode.textContent = this.validatedStudentCode;
+                this.elements.scoreDisplay.textContent = this.score;
+                
+                const percentage = ((this.score / this.questions.length) * 100).toFixed(1);
+                this.elements.percentageDisplay.textContent = `${percentage}%`;
+
+                this.elements.incorrectQuestionsContainer.innerHTML = '<h3>Questões Incorretas / Puladas:</h3>';
+                if (this.incorrectAnswers.length === 0) {
+                    this.elements.incorrectQuestionsContainer.innerHTML += '<p>Parabéns! Você não errou nenhuma questão.</p>';
+                } else {
+                    this.incorrectAnswers.forEach(item => {
+                        const div = document.createElement('div');
+                        div.className = 'incorrect-question-item';
+                        div.innerHTML = `
+                            <p><strong>Questão:</strong> ${item.q}</p>
+                            <p><strong>Sua Resposta:</strong> <span style="color: salmon;">${item.userAnswer}</span></p>
+                            <p><strong>Resposta Correta:</strong> <span style="color: #2e8b57;">${item.correctAnswer}</span></p>
+                            <p style="margin-top: 10px; font-size: 0.9em; background: #fff; padding: 10px; border-left: 4px solid lightgreen;"> 
+                                ${item.justification}
+                            </p>
+                        `;
+                        this.elements.incorrectQuestionsContainer.appendChild(div);
+                    });
+                }
+            },
+
+            restartQuiz() {
+                this.clearProgress();
+                this.currentQuestionIndex = 0;
+                this.score = 0;
+                this.incorrectAnswers = [];
+                this.elements.resultsCard.style.display = 'none';
+                this.elements.introCard.style.display = 'flex';
+                this.elements.studentCodeInput.value = '';
+                
+                if(this.elements.progressCorrect) this.elements.progressCorrect.style.width = '0%';
+                if(this.elements.progressIncorrect) this.elements.progressIncorrect.style.width = '0%';
+            }
+        };
+
+        window.onload = function() {
+            quizApp.init();
+        };
+    </script>
+</body>
+</html>
